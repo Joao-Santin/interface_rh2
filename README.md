@@ -7,5 +7,21 @@ Sistema é um experimento de programa feito usando puro Rust e a crate iced.
 - Alta performance.
 
 ## Estrutura do projeto
+```text
 src/
-  app/ 
+├── app/       # estado global, update e message
+├── domain/    # lógica de negócio
+├── infra/     # acesso a dados e integrações
+├── ui/        # telas e views do iced
+├── services/  # APIs externas
+├── utils/     # utilidades
+└── docs/      # documentação
+```
+
+## Como usar?
+```Bash
+git clone https://github.com/Joao-Santin/interface_rh2
+cargo build
+cargo run
+```
+
