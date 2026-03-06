@@ -1,6 +1,6 @@
-use crate::ui::screens::Screen;
+use crate::ui::components::buttons::Buttons;
 
 #[derive(Debug, Clone)]
 pub enum Message {
-    SwitchScreen(Screen),
+    ButtonPressed(Buttons),
 }

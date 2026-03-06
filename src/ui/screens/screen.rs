@@ -1,7 +1,8 @@
 #[derive(Debug, Clone, Copy)]
 pub enum Screen{
     Main,
-    Teste
+    AFDEvents,
+    Employees
 }
 impl Default for Screen {
     fn default() -> Self {

@@ -2,6 +2,8 @@ use iced::{Task as Command, Element, Theme};
 
 mod ui;
 mod app;
+mod domain;
+mod extensions;
 
 use app::state::AppState;
 use app::message::Message;

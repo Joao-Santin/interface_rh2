@@ -9,6 +9,7 @@ Sistema é um experimento de programa feito usando puro Rust e a crate iced.
 ## Estrutura do projeto
 ```text
 src/
+├── main.rs    # main do projeto
 ├── app/       # estado global, update e message
 ├── domain/    # lógica de negócio
 ├── infra/     # acesso a dados e integrações
