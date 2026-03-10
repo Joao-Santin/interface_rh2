@@ -3,6 +3,7 @@ use iced::{Task as Command};
 use super::message::{Message};
 use crate::ui::screens::Screen;
 use crate::ui::components::buttons::Buttons;
+use rfd::FileDialog;
 
 pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
     match message{
@@ -22,6 +23,17 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                         }
                     }
                     state.current_screen = screen
+                }
+                Buttons::GetAFDFile => {
+                    if let Some(path) = FileDialog::new()
+                        .add_filter("Arquivos de texto", &["txt"])
+                        .set_title("SELECIONE O ARQUIVO DE PONTO!")
+                        .pick_file()
+                    {
+                        state.load_afd(path);
+                    } else {
+                        println!("Nenhum arquivo selecionado.");
+                    }
                 }
             }
         }

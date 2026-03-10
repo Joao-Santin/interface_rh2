@@ -16,7 +16,8 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
         }else{
             text("PEGAR AFD!")
         },
-        button("BUSCAR DADOS"),
+        button("BUSCAR DADOS")
+            .on_press(Message::ButtonPressed(Buttons::GetAFDFile)),
         button("ACONTECIMENTOS")
             .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::AFDEvents))),
         button("FUNCIONARIOS")

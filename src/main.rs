@@ -4,6 +4,7 @@ mod ui;
 mod app;
 mod domain;
 mod extensions;
+mod infra;
 
 use app::state::AppState;
 use app::message::Message;
