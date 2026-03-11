@@ -12,17 +12,23 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                 Buttons::SwitchScreen(screen) =>{
                     match screen{
                         Screen::Main => {
-                            println!("To Main")
+                            println!("To Main");
+                            state.current_screen = screen
 
                         }
                         Screen::AFDEvents => {
-                            println!("To AFDEvents")
+                            println!("To AFDEvents");
+                            state.current_screen = screen
                         }
                         Screen::Employees => {
-                            println!("Employees")
+                            println!("Employees");
+                            state.current_screen = screen
+                        }
+                        Screen::DatePicker(calendar_type)=>{
+                            println!("DatePicker");
+                            state.current_screen = Screen::DatePicker(calendar_type)
                         }
                     }
-                    state.current_screen = screen
                 }
                 Buttons::GetAFDFile => {
                     if let Some(path) = FileDialog::new()

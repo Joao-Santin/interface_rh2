@@ -3,6 +3,7 @@ use iced::Alignment::Center;
 use iced::Length::Fill;
 use iced::widget::{button, column, text};
 
+use crate::ui::components::calendar::CalendarType;
 use crate::app::state::AppState;
 use crate::app::message::Message;
 use crate::ui::Screen;
@@ -21,7 +22,10 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
         button("ACONTECIMENTOS")
             .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::AFDEvents))),
         button("FUNCIONARIOS")
-            .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employees)))
+            .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employees))),
+        button("TESTE CALENDARIO")
+            .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::DailyEvents))))
+
     ].width(Fill).height(Fill).align_x(Center).into()
 }
 

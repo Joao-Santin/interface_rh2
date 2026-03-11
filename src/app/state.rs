@@ -1,3 +1,4 @@
+use crate::ui::components::calendar::Calendar;
 // app/state.rs
 use crate::{domain::afd::parser::parse_afd_lines, ui::screens::Screen};
 use crate::domain::afd::afd::AFD;
@@ -9,7 +10,8 @@ use std::path::PathBuf;
 pub struct AppState {
     pub current_screen: Screen,
     pub afd: AFD,
-    pub last_afd_got: Option<NaiveDateTime>
+    pub last_afd_got: Option<NaiveDateTime>,
+    pub sel_dates: Calendar
 }
 
 impl AppState {
@@ -19,7 +21,6 @@ impl AppState {
             let agora_local = Local::now().naive_local();
             self.last_afd_got = Some(agora_local);
             parse_afd_lines(self, decoded);
-
         }
     }
 }
