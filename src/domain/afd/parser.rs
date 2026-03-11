@@ -12,7 +12,7 @@ pub fn parse_afd_lines(appstate: &mut AppState, afd_string: String){
                 println!("No type with that number")
             }
         }else{
-            println!("No character in the position 10")
+            println!("")
         }
     }
 
