@@ -1,9 +1,11 @@
 use super::state::{AppState};
 use iced::{Task as Command};
 use super::message::{Message};
+use rfd::FileDialog;
+use chrono::{Datelike, Months};
 use crate::ui::screens::Screen;
 use crate::ui::components::buttons::Buttons;
-use rfd::FileDialog;
+use crate::ui::components::calendar::{CalendarMessage};
 
 pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
     match message{
@@ -41,8 +43,54 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                         println!("Nenhum arquivo selecionado.");
                     }
                 }
+                Buttons::CalendarButton(calendarmessage) => {
+                    match calendarmessage{
+                        CalendarMessage::SelectDay(calendartype, day)=>{
+                            if day>0{
+                                if let Some(date) = state.sel_dates.selected_date.get_mut(&calendartype){
+                                    if let Some(valid_date) = date.with_day(day){
+                                        *date = valid_date
+                                    }
+                                }
+                            }
+                        },
+                        CalendarMessage::PreviousYear(calendartype)=>{
+                            if let Some(date) = state.sel_dates.selected_date.get_mut(&calendartype){
+                                let mut year = date.year();
+                                year -= 1;
+                                if let Some(new_date) = date.with_year(year){
+                                    *date = new_date
+                                };
+                            }
+                        },
+                        CalendarMessage::NextYear(calendartype)=>{
+                            if let Some(date) = state.sel_dates.selected_date.get_mut(&calendartype){
+                                let mut year = date.year();
+                                year += 1;
+                                if let Some(new_date) = date.with_year(year){
+                                    *date = new_date
+                                };
+                            }
+                        },
+                        CalendarMessage::PreviousMonth(calendartype)=>{
+                            if let Some(date) = state.sel_dates.selected_date.get_mut(&calendartype){
+                                if let Some(new_date) = date.checked_sub_months(Months::new(1)){
+                                *date = new_date
+                                }
+                            }
+                        }
+                        CalendarMessage::NextMonth(calendartype)=>{
+                            if let Some(date) = state.sel_dates.selected_date.get_mut(&calendartype){
+                                if let Some(new_date) = date.checked_add_months(Months::new(1)){
+                                *date = new_date
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
+
     Command::none()
 }

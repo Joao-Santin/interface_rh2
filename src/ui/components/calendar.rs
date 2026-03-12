@@ -1,11 +1,13 @@
-use chrono::{NaiveDate, Local};
+use chrono::{NaiveDate, Local, Weekday};
 use std::collections::HashMap;
-use iced::widget::{button, column, text, Column};
+use iced::widget::{button, column, row, text, Column};
 use iced::Alignment::Center;
+use iced::Length::{Fixed};
 use iced::Element;
 use std::fmt;
 
 use crate::extensions::chrono_ext::NaiveDateExt;
+use crate::ui::components::buttons::Buttons;
 use crate::app::message::Message;
 
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
@@ -40,35 +42,75 @@ impl Default for Calendar{
         }
     }
 }
+#[derive(Debug, Clone)]
 pub enum CalendarMessage{
-    SelectDay(u32),
-    PreviousMonth,
-    NextMonth,
-    PreviousYear,
-    NextYear
+    SelectDay(CalendarType, u32),
+    PreviousMonth(CalendarType),
+    NextMonth(CalendarType),
+    PreviousYear(CalendarType),
+    NextYear(CalendarType)
 }
 impl Calendar{
     pub fn view(&self, calendar_type: CalendarType) -> Element<'_, Message>{
 
-        let mut sun: Column<Message> = column![text("Dom")].spacing(5).align_x(Center);
-        let mut mon: Column<Message> = column![text("Seg")].spacing(5).align_x(Center);
-        let mut tue: Column<Message> = column![text("Ter")].spacing(5).align_x(Center);
-        let mut wed: Column<Message> = column![text("Qua")].spacing(5).align_x(Center);
-        let mut thu: Column<Message> = column![text("Qui")].spacing(5).align_x(Center);
-        let mut fri: Column<Message> = column![text("Sex")].spacing(5).align_x(Center);
-        let mut sat: Column<Message> = column![text("Sab")].spacing(5).align_x(Center);
+        let mut sun: Column<Message> = column![text("Dom")].spacing(5).align_x(Center);//sun
+        let mut mon: Column<Message> = column![text("Seg")].spacing(5).align_x(Center);//mon
+        let mut tue: Column<Message> = column![text("Ter")].spacing(5).align_x(Center);//tue
+        let mut wed: Column<Message> = column![text("Qua")].spacing(5).align_x(Center);//wed
+        let mut thu: Column<Message> = column![text("Qui")].spacing(5).align_x(Center);//thu
+        let mut fri: Column<Message> = column![text("Sex")].spacing(5).align_x(Center);//fri
+        let mut sat: Column<Message> = column![text("Sab")].spacing(5).align_x(Center);//sat
         let mut days: Vec<(chrono::Weekday, u32)> = Vec::new();
         if let Some(sel_date) = self.selected_date.get(&calendar_type){
             days = sel_date.get_month_day_weekday();
         }
-        println!("days:{:?}", days);
-        //voltar aqui!!!!!
-        match calendar_type{
-            CalendarType::DailyEvents =>{
-                println!("DailyEvents");
-            },
-            CalendarType::StartFilter =>println!("StartFilter"),
-            CalendarType::EndFilter =>println!("EndFilter"),
+        let first_weekday = days.first().map(|(weekday, _)| *weekday);
+        match first_weekday{
+                Some(Weekday::Sun) => (),
+                Some(Weekday::Mon) => {
+                    sun = sun.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                },
+                Some(Weekday::Tue) => {
+                    sun = sun.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    mon = mon.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))))
+                },
+                Some(Weekday::Wed) => {
+                    sun = sun.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    mon = mon.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    tue = tue.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                },
+                Some(Weekday::Thu) => {
+                    sun = sun.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    mon = mon.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    tue = tue.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    wed = wed.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                },
+                Some(Weekday::Fri) => {
+                    sun = sun.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    mon = mon.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    tue = tue.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    wed = wed.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    thu = thu.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                },
+                Some(Weekday::Sat) => {
+                    sun = sun.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    mon = mon.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    tue = tue.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    wed = wed.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    thu = thu.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                    fri = fri.push(button(text("")).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, 0)))));
+                },
+                None => println!("Não funcionou")
+                }
+        for (weekday, day) in days{
+            //nao vai precisar desse match, vou mijar, escrevendo caso eu esqueça zkkkkkkkkkkkk
+            match calendar_type{
+                CalendarType::DailyEvents =>{
+                    println!("DailyEvents");
+                },
+                CalendarType::StartFilter =>println!("StartFilter"),
+                CalendarType::EndFilter =>println!("EndFilter"),
+            }
         }
         column![
             text("CALENDARIO"),

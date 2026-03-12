@@ -1,7 +1,8 @@
-use crate::ui::screens::Screen;
+use crate::ui::{components::calendar::CalendarMessage, screens::Screen};
 
 #[derive(Debug, Clone)]
 pub enum Buttons{
     SwitchScreen(Screen),
-    GetAFDFile
+    GetAFDFile,
+    CalendarButton(CalendarMessage)
 }
