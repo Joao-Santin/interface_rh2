@@ -1,9 +1,9 @@
-use chrono::{NaiveDate, Local, Weekday};
+use chrono::{NaiveDate, Local, Weekday, Datelike};
 use std::collections::HashMap;
 use iced::widget::{button, column, row, text, Column};
 use iced::Alignment::Center;
-use iced::Length::{Fixed};
-use iced::Element;
+use iced::Length::{Fixed, Fill};
+use iced::{Color, Element};
 use std::fmt;
 
 use crate::extensions::chrono_ext::NaiveDateExt;
@@ -45,6 +45,7 @@ impl Default for Calendar{
 #[derive(Debug, Clone)]
 pub enum CalendarMessage{
     SelectDay(CalendarType, u32),
+    SelectMonth(CalendarType, u32),
     PreviousMonth(CalendarType),
     NextMonth(CalendarType),
     PreviousYear(CalendarType),
@@ -103,18 +104,52 @@ impl Calendar{
                 None => println!("Não funcionou")
                 }
         for (weekday, day) in days{
-            //nao vai precisar desse match, vou mijar, escrevendo caso eu esqueça zkkkkkkkkkkkk
-            match calendar_type{
-                CalendarType::DailyEvents =>{
-                    println!("DailyEvents");
-                },
-                CalendarType::StartFilter =>println!("StartFilter"),
-                CalendarType::EndFilter =>println!("EndFilter"),
+            if let Some(date) = self.selected_date.get(&calendar_type){
+                let day_button: Element<Message> = if date.day() == day{
+                    button(text(format!("{} *", day.to_string())).color(Color::from_rgb(1.0, 0.0, 0.0))).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, day)))).into()
+                }else{
+                    button(text(format!("{}", day.to_string()))).width(Fixed(60.0)).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectDay(calendar_type, day)))).into()
+                };
+                match weekday{
+                    Weekday::Sun => sun = sun.push(day_button),
+                    Weekday::Mon => mon = mon.push(day_button),
+                    Weekday::Tue => tue = tue.push(day_button),
+                    Weekday::Wed => wed = wed.push(day_button),
+                    Weekday::Thu => thu = thu.push(day_button),
+                    Weekday::Fri => fri = fri.push(day_button),
+                    Weekday::Sat => sat = sat.push(day_button)
+                }
             }
         }
+        let month_button_width: f32 = 40.0;
+        let monthnow = self.selected_date.get(&calendar_type).unwrap().month();
+        println!("monthnow: {}", monthnow.to_string());
         column![
             text("CALENDARIO"),
-            text(format!("{}", calendar_type.to_string()))
-        ].into()
+            text(format!("{}", calendar_type.to_string())),
+            row![
+                button(text(if monthnow == 1{"Jan*"}else{"Jan"}).color(if monthnow ==1{Color::from_rgb(1.0, 0.0, 0.0)}else{Color::from_rgb(1.0,1.0,1.0)})).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectMonth(calendar_type, 1)))).width(Fixed(month_button_width)),
+                button(text(if monthnow == 2{"Fev*"}else{"Fev"}).color(if monthnow ==2{Color::from_rgb(1.0, 0.0, 0.0)}else{Color::from_rgb(1.0,1.0,1.0)})).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectMonth(calendar_type, 2)))).width(Fixed(month_button_width)),
+                button(text(if monthnow == 3{"Mar*"}else{"Mar"}).color(if monthnow ==3{Color::from_rgb(1.0, 0.0, 0.0)}else{Color::from_rgb(1.0,1.0,1.0)})).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectMonth(calendar_type, 3)))).width(Fixed(month_button_width)),
+                button(text(if monthnow == 4{"Abr*"}else{"Abr"}).color(if monthnow ==4{Color::from_rgb(1.0, 0.0, 0.0)}else{Color::from_rgb(1.0,1.0,1.0)})).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectMonth(calendar_type, 4)))).width(Fixed(month_button_width)),
+                button(text(if monthnow == 5{"Mai*"}else{"Mai"}).color(if monthnow ==5{Color::from_rgb(1.0, 0.0, 0.0)}else{Color::from_rgb(1.0,1.0,1.0)})).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectMonth(calendar_type, 5)))).width(Fixed(month_button_width)),
+                button(text(if monthnow == 6{"Jun*"}else{"Jun"}).color(if monthnow ==6{Color::from_rgb(1.0, 0.0, 0.0)}else{Color::from_rgb(1.0,1.0,1.0)})).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectMonth(calendar_type, 6)))).width(Fixed(month_button_width)),
+                button(text(if monthnow == 7{"Jul*"}else{"Jul"}).color(if monthnow ==7{Color::from_rgb(1.0, 0.0, 0.0)}else{Color::from_rgb(1.0,1.0,1.0)})).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectMonth(calendar_type, 7)))).width(Fixed(month_button_width)),
+                button(text(if monthnow == 8{"Ago*"}else{"Ago"}).color(if monthnow ==8{Color::from_rgb(1.0, 0.0, 0.0)}else{Color::from_rgb(1.0,1.0,1.0)})).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectMonth(calendar_type, 8)))).width(Fixed(month_button_width)),
+                button(text(if monthnow == 9{"Set*"}else{"Set"}).color(if monthnow ==9{Color::from_rgb(1.0, 0.0, 0.0)}else{Color::from_rgb(1.0,1.0,1.0)})).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectMonth(calendar_type, 9)))).width(Fixed(month_button_width)),
+                button(text(if monthnow == 10{"Out*"}else{"Out"}).color(if monthnow ==10{Color::from_rgb(1.0, 0.0, 0.0)}else{Color::from_rgb(1.0,1.0,1.0)})).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectMonth(calendar_type, 10)))).width(Fixed(month_button_width)),
+                button(text(if monthnow == 11{"Nov*"}else{"Nov"}).color(if monthnow ==11{Color::from_rgb(1.0, 0.0, 0.0)}else{Color::from_rgb(1.0,1.0,1.0)})).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectMonth(calendar_type, 11)))).width(Fixed(month_button_width)),
+                button(text(if monthnow == 12{"Dez*"}else{"Dez"}).color(if monthnow ==12{Color::from_rgb(1.0, 0.0, 0.0)}else{Color::from_rgb(1.0,1.0,1.0)})).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectMonth(calendar_type, 12)))).width(Fixed(month_button_width)),
+            ],
+            row![
+                sun,
+                mon,
+                tue,
+                wed,
+                thu,
+                fri,
+                sat
+            ].spacing(10)
+        ].spacing(15).width(Fill).height(Fill).align_x(Center).into()
     }
 }

@@ -1,10 +1,17 @@
 use chrono::{Datelike, NaiveDate, NaiveDateTime, Weekday, Duration};
 
 pub trait NaiveDateTimePtBr{
+    fn monthname_abb_ptbr(&self) -> &'static str;
     fn monthname_ptbr(&self) -> &'static str;
     fn weekdayname_ptbr(&self) -> &'static str;
 }
 impl NaiveDateTimePtBr for NaiveDateTime{
+    fn monthname_abb_ptbr(&self) -> &'static str{
+        const MESES: [&str; 12] = [
+            "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+        ];
+        MESES[(self.month()-1) as usize]
+    }
     fn monthname_ptbr(&self) -> &'static str{
         const MESES: [&str; 12] = [
             "Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
@@ -40,6 +47,12 @@ impl NaiveDateExt for NaiveDate{
 
     }
 impl NaiveDateTimePtBr for NaiveDate{
+    fn monthname_abb_ptbr(&self) -> &'static str{
+        const MESES: [&str; 12] = [
+            "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+        ];
+        MESES[(self.month()-1) as usize]
+    }
     fn monthname_ptbr(&self) -> &'static str{
         const MESES: [&str; 12] = [
             "Janeiro", "Fevereiro", "Marco", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"

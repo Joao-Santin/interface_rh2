@@ -54,6 +54,13 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                                 }
                             }
                         },
+                        CalendarMessage::SelectMonth(calendartype, month)=>{
+                            if let Some(date) = state.sel_dates.selected_date.get_mut(&calendartype){
+                                if let Some(valid_date) = date.with_month(month){
+                                    *date = valid_date
+                                }
+                            }
+                        }
                         CalendarMessage::PreviousYear(calendartype)=>{
                             if let Some(date) = state.sel_dates.selected_date.get_mut(&calendartype){
                                 let mut year = date.year();
