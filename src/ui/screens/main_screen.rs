@@ -1,4 +1,4 @@
-use iced::Element;
+use iced::{Element, Color};
 use iced::Alignment::Center;
 use iced::Length::Fill;
 use iced::widget::{button, column, text};
@@ -13,12 +13,18 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
     column![
         if let Some(data) = &state.last_afd_got{
             text(data.to_string())
-
         }else{
             text("PEGAR AFD!")
         },
-        button("BUSCAR DADOS")
+        if let Some(data_add) = &state.last_add_info_got{
+            text(data_add.to_string())
+        }else{
+            text("PEGAR AFD!")
+        },
+
+        button(text("BUSCAR DADOS AFD").color(if state.last_afd_got.is_some(){Color::from_rgb(0.0, 1.0, 0.0)}else{Color::from_rgb(1.0, 0.0, 0.0)}))
             .on_press(Message::ButtonPressed(Buttons::GetAFDFile)),
+        button(text("BUSCAR DADOS ADD").color(if state.last_add_info_got.is_some(){Color::from_rgb(0.0, 1.0, 0.0)}else{Color::from_rgb(1.0, 0.0, 0.0)})),
         button("ACONTECIMENTOS")
             .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::AFDEvents))),
         button("FUNCIONARIOS")

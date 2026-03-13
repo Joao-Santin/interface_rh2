@@ -8,6 +8,7 @@ use std::fmt;
 
 use crate::extensions::chrono_ext::NaiveDateExt;
 use crate::ui::components::buttons::Buttons;
+use crate::ui::Screen;
 use crate::app::message::Message;
 
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
@@ -42,6 +43,8 @@ impl Default for Calendar{
         }
     }
 }
+
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub enum CalendarMessage{
     SelectDay(CalendarType, u32),
@@ -123,10 +126,15 @@ impl Calendar{
         }
         let month_button_width: f32 = 40.0;
         let monthnow = self.selected_date.get(&calendar_type).unwrap().month();
-        println!("monthnow: {}", monthnow.to_string());
+        let yearnow = self.selected_date.get(&calendar_type).unwrap().year();
         column![
             text("CALENDARIO"),
             text(format!("{}", calendar_type.to_string())),
+            row![
+                button("<-").on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::PreviousYear(calendar_type)))),
+                text(format!("{}", yearnow.to_string())),
+                button("->").on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::NextYear(calendar_type)))),
+            ],
             row![
                 button(text(if monthnow == 1{"Jan*"}else{"Jan"}).color(if monthnow ==1{Color::from_rgb(1.0, 0.0, 0.0)}else{Color::from_rgb(1.0,1.0,1.0)})).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectMonth(calendar_type, 1)))).width(Fixed(month_button_width)),
                 button(text(if monthnow == 2{"Fev*"}else{"Fev"}).color(if monthnow ==2{Color::from_rgb(1.0, 0.0, 0.0)}else{Color::from_rgb(1.0,1.0,1.0)})).on_press(Message::ButtonPressed(Buttons::CalendarButton(CalendarMessage::SelectMonth(calendar_type, 2)))).width(Fixed(month_button_width)),
@@ -149,7 +157,12 @@ impl Calendar{
                 thu,
                 fri,
                 sat
-            ].spacing(10)
+            ].spacing(10),
+            button(text("SELECIONAR DIA!")).on_press(match calendar_type {
+                CalendarType::DailyEvents => Message::ButtonPressed(Buttons::SwitchScreen(Screen::Main)),
+                CalendarType::StartFilter => Message::ButtonPressed(Buttons::SwitchScreen(Screen::Main)),
+                CalendarType::EndFilter => Message::ButtonPressed(Buttons::SwitchScreen(Screen::Main)),
+        }),
         ].spacing(15).width(Fill).height(Fill).align_x(Center).into()
     }
 }

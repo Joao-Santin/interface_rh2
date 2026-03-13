@@ -51,7 +51,7 @@ struct CreateUpdateEmpresa{
 }
 
 #[allow(dead_code)]
-struct MarcacaoPonto{
+pub struct MarcacaoPonto{
     base: AFDBase,
     date_time: NaiveDateTime,
     cpf_empregado: String,

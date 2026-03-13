@@ -3,6 +3,7 @@ use crate::ui::components::calendar::Calendar;
 use crate::{domain::afd::parser::parse_afd_lines, ui::screens::Screen};
 use crate::domain::afd::afd::AFD;
 use crate::infra::afd_loader::decode_from_win1252_to_utf8;
+use crate::domain::info_add::info_add::InfoAdd;
 use chrono::{NaiveDateTime, Local};
 use std::path::PathBuf;
 
@@ -10,7 +11,9 @@ use std::path::PathBuf;
 pub struct AppState {
     pub current_screen: Screen,
     pub afd: AFD,
+    pub info_add: InfoAdd,
     pub last_afd_got: Option<NaiveDateTime>,
+    pub last_add_info_got: Option<NaiveDateTime>,
     pub sel_dates: Calendar
 }
 
