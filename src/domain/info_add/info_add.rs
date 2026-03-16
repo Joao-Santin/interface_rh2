@@ -3,16 +3,17 @@ use std::collections::HashMap;
 
 use crate::domain::afd::afd::MarcacaoPonto;
 
-pub enum TypeManualPonto{
+pub enum TypeOrigin{
+    AFD,
     Correcao(MarcacaoPonto),
     Criacao,
 }
 pub struct ManualPonto{
-    typemanual:TypeManualPonto,
-    date_time: NaiveDateTime,
-    cpf_empregado: String,
+    pub typemanual:TypeOrigin,
+    pub date_time: NaiveDateTime,
+    pub cpf_empregado: String,
 }
 #[derive(Default)]
 pub struct InfoAdd{
-    manualponto: HashMap<String, Vec<ManualPonto>>
+    pub manualponto: HashMap<String, Vec<ManualPonto>>
 }
