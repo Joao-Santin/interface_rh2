@@ -4,8 +4,11 @@ use crate::{domain::afd::parser::parse_afd_lines, ui::screens::Screen};
 use crate::domain::afd::afd::AFD;
 use crate::infra::afd_loader::decode_from_win1252_to_utf8;
 use crate::domain::tally::tally::Tally;
+use crate::infra::tally_loader::load_tally;
+
 use chrono::{NaiveDateTime, Local};
 use std::path::PathBuf;
+use std::collections::HashMap;
 
 #[derive(Default)]
 pub struct AppState {
@@ -25,5 +28,16 @@ impl AppState {
             self.last_afd_got = Some(agora_local);
             parse_afd_lines(self, decoded);
         }
+    }
+    pub fn load_tally(&mut self, path: PathBuf){
+        match load_tally(path) {
+            Ok(tally) => {
+                self.tally = tally;
+            }
+            Err(e) => {
+                eprintln!("Erro ao carregar tally:{}", e)
+            }
+        }
+        
     }
 }

@@ -1,8 +1,9 @@
 use chrono::{NaiveDateTime};
 use std::collections::HashMap;
-
+use serde::{Serialize, Deserialize};
 use crate::domain::afd::afd::MarcacaoPonto;
 
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum TypeOrigin{
     AFD,
     Correcao(MarcacaoPonto),
@@ -15,5 +16,5 @@ pub struct ManualPonto{
 }
 #[derive(Default)]
 pub struct InfoAdd{
-    pub manualponto: HashMap<String, Vec<ManualPonto>>
+    pub manualponto: Vec<ManualPonto>
 }

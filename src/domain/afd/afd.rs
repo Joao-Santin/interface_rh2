@@ -1,7 +1,9 @@
 use chrono::{NaiveDate, NaiveDateTime};
-
+use serde::{Serialize, Deserialize};
 use crate::app::state::AppState;
 
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum RegistryType{
     Cabecalho,
     CreateUpdateEmpresa,
@@ -16,11 +18,13 @@ pub enum RegistryType{
 
 
 #[allow(dead_code)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct AFDBase{
     nsr: String,
     tipo: RegistryType
 }
 #[allow(dead_code)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 struct Cabecalho{
     base: AFDBase,
     tipo_empregador: String,
@@ -38,6 +42,7 @@ struct Cabecalho{
 }
 
 #[allow(dead_code)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 struct CreateUpdateEmpresa{
     base: AFDBase,
     date_time: NaiveDateTime,
@@ -51,14 +56,16 @@ struct CreateUpdateEmpresa{
 }
 
 #[allow(dead_code)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct MarcacaoPonto{
-    base: AFDBase,
-    date_time: NaiveDateTime,
-    cpf_empregado: String,
-    registro_hexa: String,
+    pub base: AFDBase,
+    pub date_time: NaiveDateTime,
+    pub cpf_empregado: String,
+    pub registro_hexa: String,
 }
 
 #[allow(dead_code)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 struct AjusteRelogio{
     base: AFDBase,
     date_time_antes_registro: NaiveDateTime,
@@ -68,6 +75,7 @@ struct AjusteRelogio{
 }
 
 #[allow(dead_code)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 struct CreateUpdateDeleteEmpregado{
     base: AFDBase,
     date_time: NaiveDateTime,
@@ -80,6 +88,7 @@ struct CreateUpdateDeleteEmpregado{
 }
 
 #[allow(dead_code)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 struct SensivelREP{
     base: AFDBase,
     date_time: NaiveDateTime,
@@ -87,6 +96,7 @@ struct SensivelREP{
 }
 
 
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct AFD{
     cabecalho: Option<Cabecalho>,
     createupdateempresa: Vec<CreateUpdateEmpresa>,

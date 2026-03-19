@@ -3,6 +3,7 @@ use iced::{Task as Command};
 use super::message::{Message};
 use rfd::FileDialog;
 use chrono::{Datelike, Months};
+
 use crate::ui::screens::Screen;
 use crate::ui::components::buttons::Buttons;
 use crate::ui::components::calendar::{CalendarMessage};
@@ -43,6 +44,17 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                         println!("Nenhum arquivo selecionado.");
                     }
                 }
+                Buttons::GetTally => {
+                    if let Some(path) = FileDialog::new()
+                        .add_filter("json", &["json"])
+                        .set_title("SELECIONE A APURACAO")
+                        .pick_file()
+                    {
+                        state.load_tally(path);
+                    }else{
+                        println!("Nenhum arquivo selecionado")
+                    }
+                },
                 Buttons::CalendarButton(calendarmessage) => {
                     match calendarmessage{
                         CalendarMessage::SelectDay(calendartype, day)=>{
