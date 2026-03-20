@@ -1,7 +1,7 @@
 use crate::ui::components::calendar::Calendar;
 // app/state.rs
 use crate::{domain::afd::parser::parse_afd_lines, ui::screens::Screen};
-use crate::domain::afd::afd::AFD;
+use crate::domain::afd::afd::{AFD, get_funcionarios};
 use crate::infra::afd_loader::decode_from_win1252_to_utf8;
 use crate::domain::tally::tally::Tally;
 use crate::infra::tally_loader::load_tally;
@@ -15,6 +15,7 @@ pub struct AppState {
     pub current_screen: Screen,
     pub afd: AFD,
     pub tally: HashMap<NaiveDateTime, Tally>,
+    pub employees: HashMap<String, String>,
     pub last_afd_got: Option<NaiveDateTime>,
     pub last_add_info_got: Option<NaiveDateTime>,
     pub sel_dates: Calendar
@@ -27,6 +28,8 @@ impl AppState {
             let agora_local = Local::now().naive_local();
             self.last_afd_got = Some(agora_local);
             parse_afd_lines(self, decoded);
+            self.employees = get_funcionarios(self);
+            println!("{:?}", self.employees)
         }
     }
     pub fn load_tally(&mut self, path: PathBuf){
