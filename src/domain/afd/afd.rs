@@ -5,7 +5,7 @@ use std::collections::HashMap;
 
 pub fn get_funcionarios(appstate: &mut AppState)-> HashMap<String, String>{
     let dados: HashMap<String, String> = appstate.afd.createupdatedeleteempregado.iter().map(|i| (i.nome_empregado.clone().trim().to_string(), i.cpf_empregado.clone().trim().to_string())).collect();
-    let dados: HashMap<String, String> = dados.iter().map(|i| (i.value().clone().trim().to_string(), i.key().clone().trim().to_string())).collect();
+    let dados: HashMap<String, String> = dados.iter().map(|(k,v)| (v.clone().trim().to_string(), k.clone().trim().to_string())).collect();
     dados
 }
 #[derive(Serialize, Deserialize, Clone, Debug)]
