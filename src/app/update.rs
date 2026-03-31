@@ -27,6 +27,10 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                             println!("Employees");
                             state.current_screen = screen
                         }
+                        Screen::Employee(cpf) => {
+                            println!("Employee");
+                            state.current_screen = Screen::Employee(cpf)
+                        }
                         Screen::DatePicker(calendar_type)=>{
                             println!("DatePicker");
                             state.current_screen = Screen::DatePicker(calendar_type)

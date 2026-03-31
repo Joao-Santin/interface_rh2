@@ -1,10 +1,11 @@
 use super::super::components::calendar::CalendarType;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub enum Screen{
     Main,
     AFDEvents,
     Employees,
+    Employee(String),
     DatePicker(CalendarType)
 }
 impl Default for Screen {

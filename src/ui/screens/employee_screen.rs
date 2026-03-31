@@ -1,3 +1,4 @@
+
 use iced::Element;
 use iced::widget::{row, button, column, text, Column};
 use iced::Alignment::Center;
@@ -8,7 +9,8 @@ use crate::ui::Screen;
 use crate::app::state::AppState;
 use crate::app::message::Message;
 
-pub fn view(state: &AppState) -> Element<'_, Message> {
+pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
+    println!("{}", cpf);
     let funcionarios: Vec<Element<Message>> = state.employees.iter().map(|(k, v)|{
         row![
             column![
@@ -21,7 +23,7 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
                 text("*")
             ].width(Fixed(150.0)).align_x(Center),
             column![
-                button("config").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employee(k.clone()))))
+                text("config")
             ].width(Fixed(150.0)).align_x(Center),
         ].spacing(15).into()
     }).collect();
@@ -37,7 +39,6 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
             text("BANCO HORAS").size(20),
         ].width(Fixed(150.0)).align_x(Center),
         column![
-            text("CONFIG").size(20),
         ].width(Fixed(150.0)).align_x(Center),
     ].spacing(15);
     column![
