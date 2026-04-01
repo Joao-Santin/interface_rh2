@@ -1,5 +1,5 @@
 use iced::Element;
-use iced::widget::{row, button, column, text, Column};
+use iced::widget::{row, button, column, text, Column, scrollable};
 use iced::Alignment::Center;
 use iced::Length::{Fixed};
 
@@ -44,6 +44,6 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
         text("Employees Screen"),
         button("To Main").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Main))),
         cabecalho,
-        coluna_funcionarios
+        scrollable(coluna_funcionarios)
     ].into()
 }

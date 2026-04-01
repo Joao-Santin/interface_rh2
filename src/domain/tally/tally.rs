@@ -12,7 +12,7 @@ pub struct Tally{
     entry_marca: Option<NaiveDateTime>,// mostra a marcacao feita pela maquina de pontos.
     entry_display: NaiveDateTime,// este declara qual será mostrado na tela.
 }
-fn calculate_tally(infoadd: InfoAdd, marcacaoponto: Vec<MarcacaoPonto>)->HashMap<NaiveDateTime, Tally>{
+pub fn calculate_tally(infoadd: InfoAdd, marcacaoponto: Vec<MarcacaoPonto>)->HashMap<NaiveDateTime, Tally>{
     let mut hash_verify: HashMap<NaiveDateTime, Tally> = HashMap::new(); // item para retorno no
     // campo tally do Appstate
     for ponto_manual in infoadd.manualponto{

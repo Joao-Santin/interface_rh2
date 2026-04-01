@@ -7,6 +7,8 @@ use chrono::{Datelike, Months};
 use crate::ui::screens::Screen;
 use crate::ui::components::buttons::Buttons;
 use crate::ui::components::calendar::{CalendarMessage};
+use crate::ui::components::textinputs::TextInputsEnum;
+use crate::domain::tally::tally::calculate_tally;
 
 pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
     match message{
@@ -48,16 +50,20 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                         println!("Nenhum arquivo selecionado.");
                     }
                 }
-                Buttons::GetTally => {
+                Buttons::GetInfoAdd => {
                     if let Some(path) = FileDialog::new()
                         .add_filter("json", &["json"])
                         .set_title("SELECIONE A APURACAO")
                         .pick_file()
                     {
-                        state.load_tally(path);
+                        state.load_info_add(path);
                     }else{
                         println!("Nenhum arquivo selecionado")
                     }
+                },
+                Buttons::TallyData => {
+                    state.tally = calculate_tally(state.info_add.clone(), state.afd.marcacaoponto.clone())
+
                 },
                 Buttons::CalendarButton(calendarmessage) => {
                     match calendarmessage{
@@ -110,6 +116,13 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                             }
                         }
                     }
+                }
+            }
+        }
+        Message::TextInputChanged(textinput, valor)=>{
+            match textinput{
+                TextInputsEnum::DiaAdicionandoEmployeeScreen=>{
+                    state.text_inputs.dia_adicionando_employee_screen = valor
                 }
             }
         }

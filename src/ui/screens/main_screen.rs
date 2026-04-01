@@ -24,8 +24,8 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
 
         button(text("BUSCAR DADOS AFD").color(if state.last_afd_got.is_some(){Color::from_rgb(0.0, 1.0, 0.0)}else{Color::from_rgb(1.0, 0.0, 0.0)}))
             .on_press(Message::ButtonPressed(Buttons::GetAFDFile)),
-        button(text("BUSCAR APURACOES").color(if state.last_add_info_got.is_some(){Color::from_rgb(0.0, 1.0, 0.0)}else{Color::from_rgb(1.0, 0.0, 0.0)}))
-            .on_press(Message::ButtonPressed(Buttons::GetTally)),
+        button(text("BUSCAR INFO ADD").color(if state.last_add_info_got.is_some(){Color::from_rgb(0.0, 1.0, 0.0)}else{Color::from_rgb(1.0, 0.0, 0.0)}))
+            .on_press(Message::ButtonPressed(Buttons::GetInfoAdd)),
         button("ACONTECIMENTOS")
             .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::AFDEvents))),
         button("FUNCIONARIOS")

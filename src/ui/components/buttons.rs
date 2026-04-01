@@ -4,6 +4,7 @@ use crate::ui::{components::calendar::CalendarMessage, screens::Screen};
 pub enum Buttons{
     SwitchScreen(Screen),
     GetAFDFile,
-    GetTally,
+    GetInfoAdd,
+    TallyData,
     CalendarButton(CalendarMessage)
 }

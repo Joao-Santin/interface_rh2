@@ -1,50 +1,28 @@
 
 use iced::Element;
-use iced::widget::{row, button, column, text, Column};
-use iced::Alignment::Center;
-use iced::Length::{Fixed};
+use iced::widget::{row, button, column, text, text_input};
 
 use crate::ui::components::buttons::Buttons;
+use crate::ui::components::textinputs::TextInputsEnum;
 use crate::ui::Screen;
 use crate::app::state::AppState;
 use crate::app::message::Message;
 
 pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
-    println!("{}", cpf);
-    let funcionarios: Vec<Element<Message>> = state.employees.iter().map(|(k, v)|{
-        row![
-            column![
-                text(v)
-            ].width(Fixed(150.0)).align_x(Center),
-            column![
-                text(k)
-            ].width(Fixed(150.0)).align_x(Center),
-            column![
-                text("*")
-            ].width(Fixed(150.0)).align_x(Center),
-            column![
-                text("config")
-            ].width(Fixed(150.0)).align_x(Center),
-        ].spacing(15).into()
-    }).collect();
-    let coluna_funcionarios = Column::with_children(funcionarios);
-    let cabecalho = row![
-        column![
-            text("NOME").size(20),
-        ].width(Fixed(150.0)).align_x(Center),
-        column![
-            text("CPF").size(20),
-        ].width(Fixed(150.0)).align_x(Center),
-        column![
-            text("BANCO HORAS").size(20),
-        ].width(Fixed(150.0)).align_x(Center),
-        column![
-        ].width(Fixed(150.0)).align_x(Center),
-    ].spacing(15);
     column![
-        text("Employees Screen"),
-        button("To Main").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Main))),
-        cabecalho,
-        coluna_funcionarios
+        text("Employee Screen"),
+        text(format!("CPF:{} NOME:{}",
+            &cpf,
+            state
+                .employees
+                .get(&cpf)
+                .map(|s| s.as_str())
+                .unwrap_or("Nao encontrado")
+        )),
+        row![
+            text("Adicionar dia."),
+            text_input("dia", &state.text_inputs.dia_adicionando_employee_screen).on_input(|v| Message::TextInputChanged(TextInputsEnum::DiaAdicionandoEmployeeScreen, v)),
+        ],
+        button("To Employees").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employees))),
     ].into()
 }

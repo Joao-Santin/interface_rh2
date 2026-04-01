@@ -9,12 +9,13 @@ pub enum TypeOrigin{
     Correcao(MarcacaoPonto),
     Criacao,
 }
+#[derive(Clone, Serialize, Deserialize)]
 pub struct ManualPonto{
     pub typemanual:TypeOrigin,
     pub date_time: NaiveDateTime,
     pub cpf_empregado: String,
 }
-#[derive(Default)]
+#[derive(Default, Clone, Serialize, Deserialize)]
 pub struct InfoAdd{
     pub manualponto: Vec<ManualPonto>
 }

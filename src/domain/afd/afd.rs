@@ -103,12 +103,12 @@ struct SensivelREP{
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct AFD{
-    cabecalho: Option<Cabecalho>,
-    createupdateempresa: Vec<CreateUpdateEmpresa>,
-    marcacaoponto: Vec<MarcacaoPonto>,
-    ajusterelogio: Vec<AjusteRelogio>,
-    createupdatedeleteempregado: Vec<CreateUpdateDeleteEmpregado>,
-    sensivelrep: Vec<SensivelREP>
+    pub cabecalho: Option<Cabecalho>,
+    pub createupdateempresa: Vec<CreateUpdateEmpresa>,
+    pub marcacaoponto: Vec<MarcacaoPonto>,
+    pub ajusterelogio: Vec<AjusteRelogio>,
+    pub createupdatedeleteempregado: Vec<CreateUpdateDeleteEmpregado>,
+    pub sensivelrep: Vec<SensivelREP>
 }
 
 impl Default for AFD{
