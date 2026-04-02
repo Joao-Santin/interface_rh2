@@ -20,8 +20,8 @@ pub fn view(state: &AppState) -> Element<'_, Message>{
         Screen::Employee(cpf) =>{
             employee_screen::view(state, cpf.clone())
         }
-        Screen::DatePicker(calendar_type) => {
-            datepicker_screen::view(state, *calendar_type)
+        Screen::DatePicker(calendar_type, cpf) => {
+            datepicker_screen::view(state, *calendar_type, cpf.clone())
 
         }
     }

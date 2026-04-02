@@ -8,7 +8,6 @@ use std::fmt;
 
 use crate::extensions::chrono_ext::NaiveDateExt;
 use crate::ui::components::buttons::Buttons;
-use crate::ui::Screen;
 use crate::app::message::Message;
 
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
@@ -158,11 +157,6 @@ impl Calendar{
                 fri,
                 sat
             ].spacing(10),
-            button(text("SELECIONAR DIA!")).on_press(match calendar_type {
-                CalendarType::DailyEvents => Message::ButtonPressed(Buttons::SwitchScreen(Screen::Main)),
-                CalendarType::StartFilter => Message::ButtonPressed(Buttons::SwitchScreen(Screen::Main)),
-                CalendarType::EndFilter => Message::ButtonPressed(Buttons::SwitchScreen(Screen::Main)),
-        }),
         ].spacing(15).width(Fill).height(Fill).align_x(Center).into()
     }
 }

@@ -1,17 +1,18 @@
 use crate::domain::afd::afd::MarcacaoPonto;
-use crate::domain::info_add::info_add::{InfoAdd, ManualPonto, TypeOrigin};
+use crate::domain::info_add::info_add::{InfoAdd, TypeOrigin};
 use std::collections::HashMap;
 use chrono::{NaiveDateTime};
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Tally{
-    cpf: String,
-    origin: TypeOrigin,
-    entry_manu: Option<NaiveDateTime>,//mostra a marcacao manual feita
-    entry_marca: Option<NaiveDateTime>,// mostra a marcacao feita pela maquina de pontos.
-    entry_display: NaiveDateTime,// este declara qual será mostrado na tela.
+    pub cpf: String,
+    pub origin: TypeOrigin,
+    pub entry_manu: Option<NaiveDateTime>,//mostra a marcacao manual feita
+    pub entry_marca: Option<NaiveDateTime>,// mostra a marcacao feita pela maquina de pontos.
+    pub entry_display: NaiveDateTime,// este declara qual será mostrado na tela.
 }
+
 pub fn calculate_tally(infoadd: InfoAdd, marcacaoponto: Vec<MarcacaoPonto>)->HashMap<NaiveDateTime, Tally>{
     let mut hash_verify: HashMap<NaiveDateTime, Tally> = HashMap::new(); // item para retorno no
     // campo tally do Appstate

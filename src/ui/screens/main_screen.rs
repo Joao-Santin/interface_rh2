@@ -31,7 +31,7 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
         button("FUNCIONARIOS")
             .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employees))),
         button("TESTE CALENDARIO")
-            .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::DailyEvents))))
+            .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::DailyEvents, None))))
 
     ].width(Fill).height(Fill).align_x(Center).into()
 }

@@ -8,7 +8,6 @@ use crate::ui::screens::Screen;
 use crate::ui::components::buttons::Buttons;
 use crate::ui::components::calendar::{CalendarMessage};
 use crate::ui::components::textinputs::TextInputsEnum;
-use crate::domain::tally::tally::calculate_tally;
 
 pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
     match message{
@@ -33,9 +32,9 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                             println!("Employee");
                             state.current_screen = Screen::Employee(cpf)
                         }
-                        Screen::DatePicker(calendar_type)=>{
+                        Screen::DatePicker(calendar_type, cpf)=>{
                             println!("DatePicker");
-                            state.current_screen = Screen::DatePicker(calendar_type)
+                            state.current_screen = Screen::DatePicker(calendar_type, cpf)
                         }
                     }
                 }
@@ -62,8 +61,7 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                     }
                 },
                 Buttons::TallyData => {
-                    state.tally = calculate_tally(state.info_add.clone(), state.afd.marcacaoponto.clone())
-
+                    state.load_tally()
                 },
                 Buttons::CalendarButton(calendarmessage) => {
                     match calendarmessage{
