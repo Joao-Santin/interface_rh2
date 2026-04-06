@@ -71,3 +71,6 @@ impl NaiveDateTimePtBr for NaiveDate{
         }
     }
 }
+pub fn is_valid_naivedatetime(date_string:&String) -> bool{
+    NaiveDateTime::parse_from_str(date_string.trim(), "%d-%m-%Y %H:%M").is_ok()
+}

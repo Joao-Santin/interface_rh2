@@ -119,8 +119,14 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
         }
         Message::TextInputChanged(textinput, valor)=>{
             match textinput{
+                TextInputsEnum::DiaAlterandoEmployeeScreen =>{
+                    state.text_inputs.dia_alterando_employee_screen = valor
+                },
                 TextInputsEnum::DiaAdicionandoEmployeeScreen=>{
                     state.text_inputs.dia_adicionando_employee_screen = valor
+                },
+                TextInputsEnum::FiltroFuncionarioEmployeesScreen=>{
+                    state.text_inputs.filtro_funcionario_employee_screen = valor
                 }
             }
         }
