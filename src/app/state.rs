@@ -18,7 +18,7 @@ pub struct AppState {
     pub text_inputs: TextInputs,
     pub afd: AFD,//varios vecs, não ordenado
     pub info_add: InfoAdd,
-    pub tally: HashMap<NaiveDateTime, Tally>,//separa por NAIVEDATETIME
+    pub tally: Vec<(NaiveDateTime, Tally)>,//separa por NAIVEDATETIME
     pub employees: HashMap<String, String>,
     pub last_afd_got: Option<NaiveDateTime>,
     pub last_add_info_got: Option<NaiveDateTime>,

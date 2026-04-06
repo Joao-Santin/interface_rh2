@@ -34,15 +34,23 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
     let elementmarcacoes: Vec<Element<Message>> = grouped
         .iter()
         .map(|(date, registros)| {
-            let horarios = registros.iter().map(|(dt, _)| {
-                text(dt.format("%H:%M").to_string()).into()
+            let horarios = registros.iter().enumerate().map(|(count, (dt, tall))| {
+                if tall.entry_manu.is_some() && tall.entry_marca.is_some(){
+                    text(format!("ponto n.{}: {}(corre.)", count+1, dt.format("%H:%M").to_string())).into()
+
+                }else if tall.entry_manu.is_some(){
+                    text(format!("ponto n.{}: {}(cria.)", count+1, dt.format("%H:%M").to_string())).into()
+                }else{
+                    text(format!("ponto n.{}: {}(auto.)", count+1, dt.format("%H:%M").to_string())).into()
+                }
+
             });
 
             row![
                 text(date.format("%d/%m/%Y").to_string()),
-                row(horarios.collect::<Vec<_>>())
+                row(horarios.collect::<Vec<_>>()).spacing(10.0)
             ]
-            .into()
+            .spacing(10.0).into()
         })
         .collect();
     let coluna_marcacoes = Column::with_children(elementmarcacoes);
@@ -68,5 +76,5 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
         ],
         coluna_marcacoes,
         button("To Employees").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employees))),
-    ].into()
+    ].spacing(10.0).into()
 }
