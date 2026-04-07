@@ -4,6 +4,7 @@ use super::message::{Message};
 use rfd::FileDialog;
 use chrono::{Datelike, Months};
 
+use crate::domain::info_add::info_add::InfoAdd;
 use crate::ui::screens::Screen;
 use crate::ui::components::buttons::Buttons;
 use crate::ui::components::calendar::{CalendarMessage};
@@ -114,6 +115,15 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                             }
                         }
                     }
+                }
+                Buttons::CreateManualPonto(manualponto)=>{
+                    state.info_add.create(manualponto)
+                }
+                Buttons::UpdateManualPonto(datamod, datanova)=>{
+                    println!("updating: {:?}, {:?}", datamod, datanova)
+                }
+                Buttons::DeleteManualPonto(datamod)=>{
+                    println!("deleting: {:?}", datamod)
                 }
             }
         }

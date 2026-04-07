@@ -2,8 +2,10 @@ use iced::Color;
 use chrono::{NaiveDate, NaiveDateTime};
 use iced::Element;
 use iced::widget::{row, button, column, text, text_input, Column};
+use iced::Alignment::Center;
 use iced::Length::{Fixed, Fill};
 
+use crate::domain::info_add::info_add::{ManualPonto, TypeOrigin};
 use crate::extensions::chrono_ext::is_valid_naivedatetime;
 use crate::ui::components::buttons::Buttons;
 use crate::ui::components::textinputs::TextInputsEnum;
@@ -56,6 +58,25 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
         })
         .collect();
     let coluna_marcacoes = Column::with_children(elementmarcacoes);
+    let button_confirmar: Element<Message> =
+        if is_valid_naivedatetime(&state.text_inputs.dia_adicionando_employee_screen)&& is_valid_naivedatetime(&state.text_inputs.dia_alterando_employee_screen){
+            button("Editar!").on_press(Message::ButtonPressed(Buttons::UpdateManualPonto(NaiveDateTime::parse_from_str(&state.text_inputs.dia_alterando_employee_screen, "%d-%m-%Y %H:%M").unwrap(), NaiveDateTime::parse_from_str(&state.text_inputs.dia_adicionando_employee_screen, "%d-%m-%Y %H:%M").unwrap()))).into()
+        }else if is_valid_naivedatetime(&state.text_inputs.dia_adicionando_employee_screen){
+            button("Criar!")
+            .on_press(Message::ButtonPressed(
+                Buttons::CreateManualPonto(
+                    ManualPonto{
+                        typemanual: TypeOrigin::Criacao,
+                        date_time: NaiveDateTime::parse_from_str(&state.text_inputs.dia_adicionando_employee_screen, "%d-%m-%Y %H:%M").unwrap(),
+                        cpf_empregado: cpf,//voltar aqui
+                    }                
+                )
+            )).into()
+        }else if is_valid_naivedatetime(&state.text_inputs.dia_alterando_employee_screen){
+            button("Deletar!").on_press(Message::ButtonPressed(Buttons::DeleteManualPonto(NaiveDateTime::parse_from_str(&state.text_inputs.dia_alterando_employee_screen, "%d-%m-%Y %H:%M").unwrap()))).into()
+        }else{
+            text("").into()
+    };
     column![
         text("Employee Screen"),
         text(format!("CPF:{} NOME:{}",
@@ -73,22 +94,38 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
             button(text(format!("{:?}", state.sel_dates.selected_date.get(&CalendarType::EndFilter).map(|d| d.to_string()).unwrap_or("Sem data".to_string())))).on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::EndFilter, Some(cpf))))),
         ],
         row![
-            text("ALTERADOR DATAS:"),
-            text("Alterar:"),
-            text_input("dd-mm-aaaa hh:mm", &state.text_inputs.dia_alterando_employee_screen).on_input(|v| Message::TextInputChanged(TextInputsEnum::DiaAlterandoEmployeeScreen, v)).width(Fixed(200.0)).style(move |theme, status|{
-                let mut style = text_input::default(theme, status);
-                style.value = if is_valid_naivedatetime(&state.text_inputs.dia_alterando_employee_screen){
-                    Color::from_rgb(0.0, 0.7, 0.0)
-                }else{
-                        Color::from_rgb(0.7, 0.0, 0.0)
-                    };
-                style
-            }),
-            text("Nova Data:"),
-            text_input("dd-mm-aaaa hh:mm", &state.text_inputs.dia_adicionando_employee_screen).on_input(|v| Message::TextInputChanged(TextInputsEnum::DiaAdicionandoEmployeeScreen, v)).width(Fixed(200.0)),
+            column![
+                row![
+                    text("MANIPULAR DATA"),
+                ],
+                row![
+                    text("Alterar:"),
+                    text_input("dd-mm-aaaa hh:mm", &state.text_inputs.dia_alterando_employee_screen).on_input(|v| Message::TextInputChanged(TextInputsEnum::DiaAlterandoEmployeeScreen, v)).width(Fixed(200.0)).style(move |theme, status|{
+                        let mut style = text_input::default(theme, status);
+                        style.value = if is_valid_naivedatetime(&state.text_inputs.dia_alterando_employee_screen){
+                            Color::from_rgb(0.0, 0.7, 0.0)
+                        }else{
+                                Color::from_rgb(0.7, 0.0, 0.0)
+                            };
+                        style
+                    }),
+                    text("Nova Data:"),
+                    text_input("dd-mm-aaaa hh:mm", &state.text_inputs.dia_adicionando_employee_screen).on_input(|v| Message::TextInputChanged(TextInputsEnum::DiaAdicionandoEmployeeScreen, v)).width(Fixed(200.0)).width(Fixed(200.0)).style(move |theme, status|{
+                        let mut style = text_input::default(theme, status);
+                        style.value = if is_valid_naivedatetime(&state.text_inputs.dia_adicionando_employee_screen){
+                            Color::from_rgb(0.0, 0.7, 0.0)
+                        }else{
+                                Color::from_rgb(0.7, 0.0, 0.0)
+                            };
+                        style
+                    }),
+                    button_confirmar,
+                    // button("Confirmar!").on_press(Message::ButtonPressed(Buttons::CreateModifyDate(None, NaiveDateTime::parse_from_str(&state.text_inputs.dia_adicionando_employee_screen.trim(), "%d-%m-%Y %H:%M").unwrap())))
 
-        ],
+                ].spacing(5)
+            ].width(Fill).align_x(Center),
+        ].spacing(10),
         coluna_marcacoes,
         button("To Employees").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employees))),
-    ].spacing(10.0).into()
+    ].width(Fill).height(Fill).align_x(Center).spacing(10.0).into()
 }
