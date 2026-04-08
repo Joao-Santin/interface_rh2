@@ -35,27 +35,28 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
         grouped.push((dt.date(), vec![(dt, tally)]));
     }
     grouped.sort_by_key(|(date, _)| *date);
+    let spacing_hour = 180.0;
     let elementmarcacoes: Vec<Element<Message>> = grouped
         .iter()
         .map(|(date, registros)| {
             let horarios = registros.iter().enumerate().map(|(count, (dt, tall))| {
                 if tall.entry_manu.is_some() && tall.entry_marca.is_some(){
                     if let TypeOrigin::Correcao(ref original) = tall.origin{
-                        text(format!("ponto n.{}: {}({})", count+1, dt.format("%H:%M").to_string(), original.date_time.date().to_string())).style(|_| iced::widget::text::Style{
+                        text(format!("ponto n.{}: {}({})", count+1, dt.format("%H:%M").to_string(), original.date_time.time().format("%H:%M").to_string())).width(Fixed(spacing_hour)).style(|_| iced::widget::text::Style{
                             color: Some(Color::from_rgb(0.0, 1.0, 0.0))
                         }).into()
 
                     }else{
-                        text(format!("ponto n.{}: {}(manu.)", count+1, dt.format("%H:%M").to_string())).into()
+                        text(format!("ponto n.{}: {}(manu.)", count+1, dt.format("%H:%M").to_string())).width(Fixed(spacing_hour)).into()
 
                     }
 
                 }else if tall.entry_manu.is_some(){
-                    text(format!("ponto n.{}: {}(cria.)", count+1, dt.format("%H:%M").to_string())).style(|_| iced::widget::text::Style{
+                    text(format!("ponto n.{}: {}(cria.)", count+1, dt.format("%H:%M").to_string())).width(Fixed(spacing_hour)).style(|_| iced::widget::text::Style{
                             color: Some(Color::from_rgb(1.0, 1.0, 0.0))
                         }).into()
                 }else{
-                    text(format!("ponto n.{}: {}(auto.)", count+1, dt.format("%H:%M").to_string())).into()
+                    text(format!("ponto n.{}: {}(auto.)", count+1, dt.format("%H:%M").to_string())).width(Fixed(spacing_hour)).into()
                 }
 
             });
