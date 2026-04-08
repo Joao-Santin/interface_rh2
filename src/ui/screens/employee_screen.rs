@@ -40,10 +40,20 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
         .map(|(date, registros)| {
             let horarios = registros.iter().enumerate().map(|(count, (dt, tall))| {
                 if tall.entry_manu.is_some() && tall.entry_marca.is_some(){
-                    text(format!("ponto n.{}: {}(corre.)", count+1, dt.format("%H:%M").to_string())).into()
+                    if let TypeOrigin::Correcao(ref original) = tall.origin{
+                        text(format!("ponto n.{}: {}({})", count+1, dt.format("%H:%M").to_string(), original.date_time.date().to_string())).style(|_| iced::widget::text::Style{
+                            color: Some(Color::from_rgb(0.0, 1.0, 0.0))
+                        }).into()
+
+                    }else{
+                        text(format!("ponto n.{}: {}(manu.)", count+1, dt.format("%H:%M").to_string())).into()
+
+                    }
 
                 }else if tall.entry_manu.is_some(){
-                    text(format!("ponto n.{}: {}(cria.)", count+1, dt.format("%H:%M").to_string())).into()
+                    text(format!("ponto n.{}: {}(cria.)", count+1, dt.format("%H:%M").to_string())).style(|_| iced::widget::text::Style{
+                            color: Some(Color::from_rgb(1.0, 1.0, 0.0))
+                        }).into()
                 }else{
                     text(format!("ponto n.{}: {}(auto.)", count+1, dt.format("%H:%M").to_string())).into()
                 }
@@ -59,24 +69,100 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
         .collect();
     let coluna_marcacoes = Column::with_children(elementmarcacoes);
     let button_confirmar: Element<Message> =
-        if is_valid_naivedatetime(&state.text_inputs.dia_adicionando_employee_screen)&& is_valid_naivedatetime(&state.text_inputs.dia_alterando_employee_screen){
-            button("Editar!").on_press(Message::ButtonPressed(Buttons::UpdateManualPonto(NaiveDateTime::parse_from_str(&state.text_inputs.dia_alterando_employee_screen, "%d-%m-%Y %H:%M").unwrap(), NaiveDateTime::parse_from_str(&state.text_inputs.dia_adicionando_employee_screen, "%d-%m-%Y %H:%M").unwrap()))).into()
-        }else if is_valid_naivedatetime(&state.text_inputs.dia_adicionando_employee_screen){
+    if is_valid_naivedatetime(&state.text_inputs.dia_adicionando_employee_screen)
+        && is_valid_naivedatetime(&state.text_inputs.dia_alterando_employee_screen)
+    {
+        if let (Ok(old_dt), Ok(new_dt)) = (
+            NaiveDateTime::parse_from_str(
+                &state.text_inputs.dia_alterando_employee_screen,
+                "%d-%m-%Y %H:%M",
+            ),
+            NaiveDateTime::parse_from_str(
+                &state.text_inputs.dia_adicionando_employee_screen,
+                "%d-%m-%Y %H:%M",
+            ),
+        ) {
+            if let Some(marcacao) = state.afd.marcacaoponto.iter().find(|m| {
+                m.cpf_empregado == cpf && m.date_time == old_dt
+            }) {
+                button("Editar!")
+                    .on_press(Message::ButtonPressed(
+                        Buttons::EditManualPonto(ManualPonto {
+                            typemanual: TypeOrigin::Correcao(marcacao.clone()),
+                            date_time: new_dt,
+                            cpf_empregado: cpf.clone(),
+                        }),
+                    ))
+                    .into()
+            } else {
+                button("Editar!").into()
+            }
+        } else {
+            button("Editar!").into()
+        }
+    } else if is_valid_naivedatetime(&state.text_inputs.dia_adicionando_employee_screen) {
+        if let Ok(new_dt) = NaiveDateTime::parse_from_str(
+            &state.text_inputs.dia_adicionando_employee_screen,
+            "%d-%m-%Y %H:%M",
+        ) {
             button("Criar!")
-            .on_press(Message::ButtonPressed(
-                Buttons::CreateManualPonto(
-                    ManualPonto{
+                .on_press(Message::ButtonPressed(
+                    Buttons::CreateManualPonto(ManualPonto {
                         typemanual: TypeOrigin::Criacao,
-                        date_time: NaiveDateTime::parse_from_str(&state.text_inputs.dia_adicionando_employee_screen, "%d-%m-%Y %H:%M").unwrap(),
-                        cpf_empregado: cpf,//voltar aqui
-                    }                
-                )
-            )).into()
-        }else if is_valid_naivedatetime(&state.text_inputs.dia_alterando_employee_screen){
-            button("Deletar!").on_press(Message::ButtonPressed(Buttons::DeleteManualPonto(NaiveDateTime::parse_from_str(&state.text_inputs.dia_alterando_employee_screen, "%d-%m-%Y %H:%M").unwrap()))).into()
-        }else{
-            text("").into()
+                        date_time: new_dt,
+                        cpf_empregado: cpf.clone(),
+                    }),
+                ))
+                .into()
+        } else {
+            button("Criar!").into()
+        }
+    } else if is_valid_naivedatetime(&state.text_inputs.dia_alterando_employee_screen) {
+        if let Ok(old_dt) = NaiveDateTime::parse_from_str(
+            &state.text_inputs.dia_alterando_employee_screen,
+            "%d-%m-%Y %H:%M",
+        ) {
+            button("Deletar!")
+                .on_press(Message::ButtonPressed(
+                    Buttons::DeleteManualPonto(ManualPonto{
+                        typemanual: TypeOrigin::AFD,
+                        date_time: old_dt,
+                        cpf_empregado: cpf.clone()
+                    },
+                )))
+                .into()
+        } else {
+            button("Deletar!").into()
+        }
+    } else {
+        text("").into()
     };
+    // let button_confirmar: Element<Message> =
+    //     if is_valid_naivedatetime(&state.text_inputs.dia_adicionando_employee_screen)&& is_valid_naivedatetime(&state.text_inputs.dia_alterando_employee_screen){
+    //         button("Editar!").on_press(Message::ButtonPressed(
+    //             Buttons::EditManualPonto(ManualPonto{
+    //                 typemanual: TypeOrigin::Correcao(state.afd.marcacaoponto.iter().find(|m| {
+    //                     m.cpf_empregado == cpf && m.date_time == NaiveDateTime::parse_from_str(&state.text_inputs.dia_alterando_employee_screen, "%d-%m-%Y %H:%M").unwrap()}).unwrap().clone()),
+    //                 date_time: NaiveDateTime::parse_from_str(&state.text_inputs.dia_adicionando_employee_screen, "%d-%m-%Y %H:%M").unwrap(),
+    //                 cpf_empregado: cpf.clone()
+    //         })
+    //         )).into()
+    //     }else if is_valid_naivedatetime(&state.text_inputs.dia_adicionando_employee_screen){
+    //         button("Criar!")
+    //         .on_press(Message::ButtonPressed(
+    //             Buttons::CreateManualPonto(
+    //                 ManualPonto{
+    //                     typemanual: TypeOrigin::Criacao,
+    //                     date_time: NaiveDateTime::parse_from_str(&state.text_inputs.dia_adicionando_employee_screen, "%d-%m-%Y %H:%M").unwrap(),
+    //                     cpf_empregado: cpf.clone(),//voltar aqui
+    //                 }                
+    //             )
+    //         )).into()
+    //     }else if is_valid_naivedatetime(&state.text_inputs.dia_alterando_employee_screen){
+    //         button("Deletar!").on_press(Message::ButtonPressed(Buttons::DeleteManualPonto(NaiveDateTime::parse_from_str(&state.text_inputs.dia_alterando_employee_screen, "%d-%m-%Y %H:%M").unwrap()))).into()
+    //     }else{
+    //         text("").into()
+    // };
     column![
         text("Employee Screen"),
         text(format!("CPF:{} NOME:{}",

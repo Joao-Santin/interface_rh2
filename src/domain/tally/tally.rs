@@ -19,6 +19,20 @@ pub fn calculate_tally(
 
     let mut vec_verify: Vec<(NaiveDateTime, Tally)> = Vec::new();
 
+    use std::collections::HashSet;
+
+    let mut corrigidos: HashSet<(String, NaiveDateTime)> = HashSet::new();
+
+    // identifica quais AFD foram corrigidos
+    for ponto_manual in &infoadd.manualponto {
+        if let TypeOrigin::Correcao(ref original) = ponto_manual.typemanual {
+            corrigidos.insert((
+                ponto_manual.cpf_empregado.clone(),
+                original.date_time
+            ));
+        }
+    }
+
     // Pontos manuais
     for ponto_manual in infoadd.manualponto {
         let data_original = if let TypeOrigin::Correcao(ref original) = ponto_manual.typemanual {
@@ -39,8 +53,12 @@ pub fn calculate_tally(
         ));
     }
 
-    // Pontos da maquina(AFD)
+    // Pontos da máquina (AFD)
     for ponto_afd in marcacaoponto {
+
+        if corrigidos.contains(&(ponto_afd.cpf_empregado.clone(), ponto_afd.date_time)) {
+            continue; // 👈 ESSA LINHA resolve seu problema
+        }
 
         vec_verify.push((
             ponto_afd.date_time,

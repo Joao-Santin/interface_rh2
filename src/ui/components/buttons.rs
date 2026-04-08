@@ -10,6 +10,6 @@ pub enum Buttons{
     TallyData,
     CalendarButton(CalendarMessage),
     CreateManualPonto(ManualPonto),//criando e alterando infoadd do state.
-    UpdateManualPonto(NaiveDateTime, NaiveDateTime),
-    DeleteManualPonto(NaiveDateTime),
+    EditManualPonto(ManualPonto),
+    DeleteManualPonto(ManualPonto),
 }
