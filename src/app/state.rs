@@ -26,6 +26,8 @@ pub struct AppState {
 }
 
 impl AppState {
+    pub fn save_info_add(&mut self, path: PathBuf){
+    }
     pub fn load_tally(&mut self) {
         self.tally = calculate_tally(self.info_add.clone(), self.afd.marcacaoponto.clone())
     }

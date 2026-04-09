@@ -7,6 +7,7 @@ pub enum Buttons{
     SwitchScreen(Screen),
     GetAFDFile,
     GetInfoAdd,
+    SaveInfoAdd,
     TallyData,
     CalendarButton(CalendarMessage),
     CreateManualPonto(ManualPonto),//criando e alterando infoadd do state.

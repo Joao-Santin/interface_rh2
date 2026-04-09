@@ -60,6 +60,17 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                         println!("Nenhum arquivo selecionado")
                     }
                 },
+                Buttons::SaveInfoAdd =>{
+                    if let Some(path) = FileDialog::new()
+                        .add_filter("json", &["json"])
+                        .set_title("SELECIONE A APURACAO")
+                        .pick_file()
+                    {
+                        state.save_info_add(path);
+                    }else{
+                        println!("Nenhum arquivo selecionado")
+                    }
+                },
                 Buttons::TallyData => {
                     state.load_tally()
                 },
