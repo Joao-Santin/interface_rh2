@@ -2,7 +2,7 @@ use super::state::{AppState};
 use iced::{Task as Command};
 use super::message::{Message};
 use rfd::FileDialog;
-use chrono::{Datelike, Months};
+use chrono::{Datelike, Months, Local};
 
 use crate::ui::screens::Screen;
 use crate::ui::components::buttons::Buttons;
@@ -61,14 +61,20 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                     }
                 },
                 Buttons::SaveInfoAdd =>{
+                    let now = Local::now();
+                    let filename = format!(
+                        "infoadd_{}.json",
+                        now.format("%d-%m-%Y_%H-%M-%S")
+                );
                     if let Some(path) = FileDialog::new()
+                        .set_file_name(&filename)
                         .add_filter("json", &["json"])
-                        .set_title("SELECIONE A APURACAO")
-                        .pick_file()
+                        .set_title("SALVAR INFOADD")
+                        .save_file()
                     {
                         state.save_info_add(path);
                     }else{
-                        println!("Nenhum arquivo selecionado")
+                        println!("SALVAMENTO CANCELADO")
                     }
                 },
                 Buttons::TallyData => {

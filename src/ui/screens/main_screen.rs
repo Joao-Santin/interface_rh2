@@ -28,13 +28,10 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
             .on_press(Message::ButtonPressed(Buttons::GetInfoAdd)),
         button(text("SALVAR INFO ADD"))
             .on_press(Message::ButtonPressed(Buttons::SaveInfoAdd)),
-        button("ACONTECIMENTOS")
-            .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::AFDEvents))),
+        // button("ACONTECIMENTOS")
+        //     .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::AFDEvents))),
         button("FUNCIONARIOS")
             .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employees))),
-        button("TESTE CALENDARIO")
-            .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::DailyEvents, None))))
-
     ].width(Fill).height(Fill).align_x(Center).into()
 }
 

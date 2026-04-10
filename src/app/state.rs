@@ -11,6 +11,8 @@ use crate::infra::info_add_loader::load_info_add;
 use chrono::{NaiveDateTime, Local};
 use std::path::PathBuf;
 use std::collections::HashMap;
+use std::fs::File;
+use std::io::Write;
 
 #[derive(Default)]
 pub struct AppState {
@@ -27,6 +29,26 @@ pub struct AppState {
 
 impl AppState {
     pub fn save_info_add(&mut self, path: PathBuf){
+        match File::create(&path) {
+            Ok(mut file) => {
+                match serde_json::to_string_pretty(&self.info_add) {
+                    Ok(json) => {
+                        if let Err(e) = file.write_all(json.as_bytes()) {
+                            println!("Erro ao escrever arquivo: {}", e);
+                        } else {
+                            println!("Salvo com sucesso em {:?}", path);
+                        }
+                    }
+                    Err(e) => {
+                        println!("Erro ao serializar JSON: {}", e);
+                    }
+                }
+            }
+            Err(e) => {
+                println!("Erro ao criar arquivo: {}", e);
+            }
+        }
+
     }
     pub fn load_tally(&mut self) {
         self.tally = calculate_tally(self.info_add.clone(), self.afd.marcacaoponto.clone())
@@ -45,10 +67,12 @@ impl AppState {
         match load_info_add(path) {
             Ok(info_add) => {
                 self.info_add = info_add;
+                let agora_local = Local::now().naive_local();
+                self.last_add_info_got = Some(agora_local);
                 self.load_tally()
             }
             Err(e) => {
-                eprintln!("Erro ao carregar tally:{}", e)
+                eprintln!("Erro ao carregar info_dd:{}", e)
             }
         }
         
