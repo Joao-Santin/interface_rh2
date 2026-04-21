@@ -36,6 +36,10 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                             println!("DatePicker");
                             state.current_screen = Screen::DatePicker(calendar_type, cpf)
                         }
+                        Screen::CompanyDayOff => {
+                            println!("CompanyDayOff");
+                            state.current_screen = screen
+                        }
                     }
                 }
                 Buttons::GetAFDFile => {
@@ -133,17 +137,17 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                     }
                 }
                 Buttons::CreateManualPonto(manualponto)=>{
-                    state.info_add.create(manualponto);
+                    state.info_add.create_manual_ponto(manualponto);
                     state.load_tally();
                     println!("{:?}", state.info_add)
                 }
                 Buttons::EditManualPonto(manualponto)=>{
-                    state.info_add.edit(manualponto);
+                    state.info_add.edit_manual_ponto(manualponto);
                     state.load_tally();
                     println!("{:?}", state.info_add)
                 }
                 Buttons::DeleteManualPonto(manualponto)=>{
-                    state.info_add.delete(manualponto);
+                    state.info_add.delete_manual_ponto(manualponto);
                     state.load_tally();
                     println!("{:?}", state.info_add)
                 }

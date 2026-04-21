@@ -6,7 +6,8 @@ pub enum Screen{
     AFDEvents,
     Employees,
     Employee(String),
-    DatePicker(CalendarType, Option<String>)
+    DatePicker(CalendarType, Option<String>),
+    CompanyDayOff
 }
 impl Default for Screen {
     fn default() -> Self {

@@ -14,6 +14,8 @@ pub fn view(state: &AppState, calendar_type: CalendarType, cpf: Option<String>) 
         CalendarType::StartFilter => Screen::Employee(cpf.unwrap()),
         CalendarType::EndFilter => Screen::Employee(cpf.unwrap()),
         CalendarType::DailyEvents => Screen::Main,
+        CalendarType::StartDayOffCompany => Screen::CompanyDayOff,
+        CalendarType::EndDayOffCompany => Screen::CompanyDayOff,
     };
     column![
         text("DatePicker"),

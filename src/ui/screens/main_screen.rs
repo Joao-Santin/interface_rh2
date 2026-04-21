@@ -32,6 +32,8 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
         //     .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::AFDEvents))),
         button("FUNCIONARIOS")
             .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employees))),
+        button("FERIADOS E FERIAS COLETIVAS")
+            .on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::CompanyDayOff)))
     ].width(Fill).height(Fill).align_x(Center).into()
 }
 

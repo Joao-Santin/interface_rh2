@@ -5,4 +5,5 @@ pub mod employees_screen;
 pub mod employee_screen;
 pub mod afdevents_screen;
 pub mod datepicker_screen;
+pub mod company_day_off_screen;
 

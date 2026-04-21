@@ -138,32 +138,6 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
     } else {
         text("").into()
     };
-    // let button_confirmar: Element<Message> =
-    //     if is_valid_naivedatetime(&state.text_inputs.dia_adicionando_employee_screen)&& is_valid_naivedatetime(&state.text_inputs.dia_alterando_employee_screen){
-    //         button("Editar!").on_press(Message::ButtonPressed(
-    //             Buttons::EditManualPonto(ManualPonto{
-    //                 typemanual: TypeOrigin::Correcao(state.afd.marcacaoponto.iter().find(|m| {
-    //                     m.cpf_empregado == cpf && m.date_time == NaiveDateTime::parse_from_str(&state.text_inputs.dia_alterando_employee_screen, "%d-%m-%Y %H:%M").unwrap()}).unwrap().clone()),
-    //                 date_time: NaiveDateTime::parse_from_str(&state.text_inputs.dia_adicionando_employee_screen, "%d-%m-%Y %H:%M").unwrap(),
-    //                 cpf_empregado: cpf.clone()
-    //         })
-    //         )).into()
-    //     }else if is_valid_naivedatetime(&state.text_inputs.dia_adicionando_employee_screen){
-    //         button("Criar!")
-    //         .on_press(Message::ButtonPressed(
-    //             Buttons::CreateManualPonto(
-    //                 ManualPonto{
-    //                     typemanual: TypeOrigin::Criacao,
-    //                     date_time: NaiveDateTime::parse_from_str(&state.text_inputs.dia_adicionando_employee_screen, "%d-%m-%Y %H:%M").unwrap(),
-    //                     cpf_empregado: cpf.clone(),//voltar aqui
-    //                 }                
-    //             )
-    //         )).into()
-    //     }else if is_valid_naivedatetime(&state.text_inputs.dia_alterando_employee_screen){
-    //         button("Deletar!").on_press(Message::ButtonPressed(Buttons::DeleteManualPonto(NaiveDateTime::parse_from_str(&state.text_inputs.dia_alterando_employee_screen, "%d-%m-%Y %H:%M").unwrap()))).into()
-    //     }else{
-    //         text("").into()
-    // };
     column![
         text("Employee Screen"),
         text(format!("CPF:{} NOME:{}",
