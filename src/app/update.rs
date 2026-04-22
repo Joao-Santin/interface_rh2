@@ -164,6 +164,9 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                 TextInputsEnum::FiltroFuncionarioEmployeesScreen=>{
                     state.text_inputs.filtro_funcionario_employee_screen = valor
                 }
+                TextInputsEnum::MoreInfoCompanyDayOffScreen=>{
+                    state.text_inputs.more_info_company_day_off_screen = valor
+                }
             }
         }
     }

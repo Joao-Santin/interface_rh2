@@ -17,6 +17,8 @@ pub enum CalendarType{
     EndFilter,
     StartDayOffCompany,
     EndDayOffCompany,
+    StartDayOffCompanyCreating,
+    EndDayOffCompanyCreating,
 }
 impl fmt::Display for CalendarType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -26,6 +28,8 @@ impl fmt::Display for CalendarType {
             CalendarType::EndFilter => "EndFilter",
             CalendarType::StartDayOffCompany => "StartDayOffCompany",
             CalendarType::EndDayOffCompany => "EndDayOffCompany",
+            CalendarType::StartDayOffCompanyCreating => "StartDayOffCompanyCreating",
+            CalendarType::EndDayOffCompanyCreating => "EndDayOffCompanyCreating",
         };
         write!(f, "{}", text)
     }
@@ -42,7 +46,8 @@ impl Default for Calendar{
         selected_date.insert(CalendarType::EndFilter, time_now);
         selected_date.insert(CalendarType::StartDayOffCompany, time_now);
         selected_date.insert(CalendarType::EndDayOffCompany, time_now);
-
+        selected_date.insert(CalendarType::StartDayOffCompanyCreating, time_now);
+        selected_date.insert(CalendarType::EndDayOffCompanyCreating, time_now);
 
         Self{
             selected_date
