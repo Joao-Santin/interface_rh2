@@ -1,4 +1,5 @@
 use super::state::{AppState};
+use iced::widget::pick_list;
 use iced::{Task as Command};
 use super::message::{Message};
 use rfd::FileDialog;
@@ -151,7 +152,14 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                     state.load_tally();
                     println!("{:?}", state.info_add)
                 }
+                Buttons::CreateCompanyDayOff(companydayoff)=>{
+                    state.info_add.create_company_day_off(companydayoff);
+                    state.load_tally();
+                }
             }
+        }
+        Message::DayOffTypePicked(dayofftype) =>{
+            state.picked_dayoff_creating = Some(dayofftype)
         }
         Message::TextInputChanged(textinput, valor)=>{
             match textinput{

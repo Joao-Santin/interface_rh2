@@ -1,4 +1,4 @@
-use crate::domain::info_add::info_add::InfoAdd;
+use crate::domain::info_add::info_add::{InfoAdd, DayOffType};
 use crate::ui::components::textinputs::TextInputs;
 use crate::ui::components::calendar::Calendar;
 // app/state.rs
@@ -18,6 +18,7 @@ use std::io::Write;
 pub struct AppState {
     pub current_screen: Screen,
     pub text_inputs: TextInputs,
+    pub picked_dayoff_creating: Option<DayOffType>,
     pub afd: AFD,//varios vecs, não ordenado
     pub info_add: InfoAdd,
     pub tally: Vec<(NaiveDateTime, Tally)>,//separa por NAIVEDATETIME
@@ -77,4 +78,5 @@ impl AppState {
         }
         
     }
+
 }

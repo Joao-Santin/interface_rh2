@@ -14,13 +14,22 @@ pub struct ManualPonto{
     pub date_time: NaiveDateTime,
     pub cpf_empregado: String,
 }
-#[derive(Clone, Serialize, Deserialize, Debug)]
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq, Eq, Copy)]
 pub enum DayOffType{
     Holiday,
     Vacation,
     SickLeave,
     CollectiveLeave,
-    Other(String),
+}
+impl std::fmt::Display for DayOffType{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(match self{
+            Self::CollectiveLeave => "Ferias Coletiva",
+            Self::SickLeave => "Atestado",
+            Self::Vacation => "Ferias",
+            Self::Holiday => "Feriado"
+        })
+    }
 }
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct CompanyDayOff{
@@ -61,5 +70,8 @@ impl InfoAdd{
         self.manualponto.retain(|m| {
             !(m.cpf_empregado == delete.cpf_empregado && m.date_time == delete.date_time)
         });
+    }
+    pub fn create_company_day_off(&mut self, novo: CompanyDayOff){
+        self.company_day_off.push(novo);
     }
 }
