@@ -7,7 +7,8 @@ pub enum Screen{
     Employees,
     Employee(String),
     DatePicker(CalendarType, Option<String>),
-    CompanyDayOff
+    CompanyDayOff,
+    EmployeeDayOff(String)
 }
 impl Default for Screen {
     fn default() -> Self {

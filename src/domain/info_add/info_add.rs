@@ -31,14 +31,14 @@ impl std::fmt::Display for DayOffType{
         })
     }
 }
-#[derive(Clone, Serialize, Deserialize, Debug)]
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 pub struct CompanyDayOff{
     pub typ: DayOffType,
     pub start: NaiveDate,
     pub end: NaiveDate,
     pub more_info: String,
 }
-#[derive(Clone, Serialize, Deserialize, Debug)]
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 pub struct EmployeeDayOff{
     pub cpf: String,
     pub typ: DayOffType,
@@ -73,5 +73,18 @@ impl InfoAdd{
     }
     pub fn create_company_day_off(&mut self, novo: CompanyDayOff){
         self.company_day_off.push(novo);
+    }
+    pub fn delete_company_day_off(&mut self, novo: CompanyDayOff){
+        self.company_day_off.retain(|cdo| {
+            !(cdo.typ == novo.typ && cdo.start == novo.start && cdo.end == novo.end)
+        });
+    }
+    pub fn create_employee_day_off(&mut self, novo: EmployeeDayOff){
+        self.employee_day_off.push(novo);
+    }
+    pub fn delete_employee_day_off(&mut self, novo: EmployeeDayOff){
+        self.employee_day_off.retain(|cdo| {
+            !(cdo.typ == novo.typ && cdo.start == novo.start && cdo.end == novo.end)
+        });
     }
 }

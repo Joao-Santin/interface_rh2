@@ -18,7 +18,8 @@ use std::io::Write;
 pub struct AppState {
     pub current_screen: Screen,
     pub text_inputs: TextInputs,
-    pub picked_dayoff_creating: Option<DayOffType>,
+    pub picked_dayoff_company_creating: Option<DayOffType>,
+    pub picked_dayoff_employee_creating: Option<DayOffType>,
     pub afd: AFD,//varios vecs, não ordenado
     pub info_add: InfoAdd,
     pub tally: Vec<(NaiveDateTime, Tally)>,//separa por NAIVEDATETIME

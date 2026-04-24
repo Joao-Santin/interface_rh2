@@ -1,5 +1,4 @@
 use super::state::{AppState};
-use iced::widget::pick_list;
 use iced::{Task as Command};
 use super::message::{Message};
 use rfd::FileDialog;
@@ -40,6 +39,10 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                         Screen::CompanyDayOff => {
                             println!("CompanyDayOff");
                             state.current_screen = screen
+                        }
+                        Screen::EmployeeDayOff(cpf) => {
+                            println!("EmployeeDayOff");
+                            state.current_screen = Screen::EmployeeDayOff(cpf)
                         }
                     }
                 }
@@ -155,11 +158,26 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                 Buttons::CreateCompanyDayOff(companydayoff)=>{
                     state.info_add.create_company_day_off(companydayoff);
                     state.load_tally();
+                    println!("Creating CompanyDayOff")
+                }
+                Buttons::DeleteCompanyDayOff(companydayoff)=>{
+                    state.info_add.delete_company_day_off(companydayoff);
+                    state.load_tally();
+                    println!("Deleting CompanyDayOff")
+                }
+                Buttons::CreateEmployeeDayOff(employeedayoff)=>{
+                    state.info_add.create_employee_day_off(employeedayoff)
+                }
+                Buttons::DeleteEmployeeDayOff(employeedayoff)=>{
+                    state.info_add.delete_employee_day_off(employeedayoff)
                 }
             }
         }
-        Message::DayOffTypePicked(dayofftype) =>{
-            state.picked_dayoff_creating = Some(dayofftype)
+        Message::DayOffCompanyTypePicked(dayofftype) =>{
+            state.picked_dayoff_company_creating = Some(dayofftype)
+        }
+        Message::DayOffEmployeeTypePicked(dayofftype) =>{
+            state.picked_dayoff_employee_creating = Some(dayofftype)
         }
         Message::TextInputChanged(textinput, valor)=>{
             match textinput{
@@ -174,6 +192,9 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                 }
                 TextInputsEnum::MoreInfoCompanyDayOffScreen=>{
                     state.text_inputs.more_info_company_day_off_screen = valor
+                }
+                TextInputsEnum::MoreInfoEmployeeDayOffScreen=>{
+                    state.text_inputs.more_info_employee_day_off_screen = valor
                 }
             }
         }

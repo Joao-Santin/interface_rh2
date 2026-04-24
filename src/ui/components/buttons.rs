@@ -1,6 +1,5 @@
 use crate::ui::{components::calendar::CalendarMessage, screens::Screen};
-use crate::domain::info_add::info_add::{CompanyDayOff, ManualPonto};
-use chrono::NaiveDateTime;
+use crate::domain::info_add::info_add::{CompanyDayOff, ManualPonto, EmployeeDayOff};
 
 #[derive(Debug, Clone)]
 pub enum Buttons{
@@ -14,4 +13,7 @@ pub enum Buttons{
     EditManualPonto(ManualPonto),
     DeleteManualPonto(ManualPonto),
     CreateCompanyDayOff(CompanyDayOff),
+    DeleteCompanyDayOff(CompanyDayOff),
+    CreateEmployeeDayOff(EmployeeDayOff),
+    DeleteEmployeeDayOff(EmployeeDayOff)
 }

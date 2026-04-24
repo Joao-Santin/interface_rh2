@@ -149,9 +149,12 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
                 .unwrap_or("Nao encontrado")
         )),
         row![
+            button("FERIAS E FALTAS!").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::EmployeeDayOff(cpf.clone()))))
+        ],
+        row![
             text("Do dia "),
             button(text(format!("{:?}", state.sel_dates.selected_date.get(&CalendarType::StartFilter).map(|d| d.to_string()).unwrap_or("Sem data".to_string())))).on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::StartFilter, Some(cpf.clone()))))),
-            text("ao dia "),
+            text(" ao "),
             button(text(format!("{:?}", state.sel_dates.selected_date.get(&CalendarType::EndFilter).map(|d| d.to_string()).unwrap_or("Sem data".to_string())))).on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::EndFilter, Some(cpf))))),
         ],
         row![

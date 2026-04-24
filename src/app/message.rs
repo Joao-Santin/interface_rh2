@@ -5,5 +5,6 @@ use crate::domain::info_add::info_add::DayOffType;
 pub enum Message {
     ButtonPressed(Buttons),
     TextInputChanged(TextInputsEnum, String),
-    DayOffTypePicked(DayOffType)
+    DayOffCompanyTypePicked(DayOffType),
+    DayOffEmployeeTypePicked(DayOffType)
 }

@@ -7,7 +7,7 @@ use crate::app::message::Message;
 use crate::ui::components::buttons::Buttons;
 use crate::ui::Screen;
 use crate::domain::info_add::info_add::{CompanyDayOff, DayOffType};
-use crate::ui::components::textinputs::{TextInputsEnum, TextInputs};
+use crate::ui::components::textinputs::{TextInputsEnum};
 
 pub fn view(state: &AppState) -> Element<'_, Message> {
     let start_search_period = state.sel_dates.selected_date.get(&CalendarType::StartDayOffCompany).unwrap();
@@ -20,8 +20,12 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
         .collect();
     let element_dayoffs: Vec<Element<Message>> = dayoffs
         .iter()
+        .cloned()
         .map(|cdo| {
-            text(format!("{}, {}, {}", cdo.start.to_string(), cdo.end.to_string(), cdo.more_info.to_string())).into()
+            row![
+            text(format!("{} | {} à {} | OBS: {}",cdo.typ.to_string(), cdo.start.to_string(), cdo.end.to_string(), cdo.more_info.to_string())),
+            button("DELETAR").on_press(Message::ButtonPressed(Buttons::DeleteCompanyDayOff(cdo.clone())))
+            ].into()
         })
         .collect();
     let motivos = [
@@ -34,17 +38,11 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
             text("Folgas e Férias Coletivas"),
         ],
         row![
-            text("Do dia "),
-            button(text(format!("{:?}", state.sel_dates.selected_date.get(&CalendarType::StartDayOffCompany).map(|d| d.to_string()).unwrap_or("Sem data".to_string())))).on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::StartDayOffCompany, None)))),
-            text("ao dia "),
-            button(text(format!("{:?}", state.sel_dates.selected_date.get(&CalendarType::EndDayOffCompany).map(|d| d.to_string()).unwrap_or("Sem data".to_string())))).on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::EndDayOffCompany, None)))),
-        ],
-        row![
             column![
                 text("Criar DayOff"),
                 row![
                     text("Motivo:"),
-                    pick_list(motivos, state.picked_dayoff_creating, Message::DayOffTypePicked).placeholder("selecione o motivo!")
+                    pick_list(motivos, state.picked_dayoff_company_creating, Message::DayOffCompanyTypePicked).placeholder("selecione o motivo!")
 
                 ],
                 row![
@@ -58,7 +56,7 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
                 ],
                 row![
                     if let (Some (typ), Some(start), Some(end)) = (
-                state.picked_dayoff_creating.clone(),
+                state.picked_dayoff_company_creating.clone(),
                 state.sel_dates.selected_date.get(&CalendarType::StartDayOffCompanyCreating).copied(),
                 state.sel_dates.selected_date.get(&CalendarType::EndDayOffCompanyCreating).copied(),
 
@@ -74,6 +72,15 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
                         button("PREENCHA O QUE FALTA!!!")
                     }
                 ]
+            ],
+        ],
+        column![
+            text("PROCURAR"),
+            row![
+                text("do dia"),
+                button(text(format!("{:?}", state.sel_dates.selected_date.get(&CalendarType::StartDayOffCompany).map(|d| d.to_string()).unwrap_or("Sem data".to_string())))).on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::StartDayOffCompany, None)))),
+                text("ao dia"),
+                button(text(format!("{:?}", state.sel_dates.selected_date.get(&CalendarType::EndDayOffCompany).map(|d| d.to_string()).unwrap_or("Sem data".to_string())))).on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::EndDayOffCompany, None))))
             ],
         ],
         column_dayoffs,

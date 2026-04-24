@@ -19,6 +19,10 @@ pub enum CalendarType{
     EndDayOffCompany,
     StartDayOffCompanyCreating,
     EndDayOffCompanyCreating,
+    StartDayOffEmployee,
+    EndDayOffEmployee,
+    StartDayOffEmployeeCreating,
+    EndDayOffEmployeeCreating,
 }
 impl fmt::Display for CalendarType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -30,6 +34,10 @@ impl fmt::Display for CalendarType {
             CalendarType::EndDayOffCompany => "EndDayOffCompany",
             CalendarType::StartDayOffCompanyCreating => "StartDayOffCompanyCreating",
             CalendarType::EndDayOffCompanyCreating => "EndDayOffCompanyCreating",
+            CalendarType::StartDayOffEmployee => "StartDayOffEmployee",
+            CalendarType::EndDayOffEmployee => "EndDayOffEmployee",
+            CalendarType::StartDayOffEmployeeCreating => "StartDayOffEmployeeCreating",
+            CalendarType::EndDayOffEmployeeCreating => "EndDayOffEmployeeCreating"
         };
         write!(f, "{}", text)
     }
@@ -48,6 +56,10 @@ impl Default for Calendar{
         selected_date.insert(CalendarType::EndDayOffCompany, time_now);
         selected_date.insert(CalendarType::StartDayOffCompanyCreating, time_now);
         selected_date.insert(CalendarType::EndDayOffCompanyCreating, time_now);
+        selected_date.insert(CalendarType::StartDayOffEmployee, time_now);
+        selected_date.insert(CalendarType::EndDayOffEmployee, time_now);
+        selected_date.insert(CalendarType::StartDayOffEmployeeCreating, time_now);
+        selected_date.insert(CalendarType::EndDayOffEmployeeCreating, time_now);
 
         Self{
             selected_date

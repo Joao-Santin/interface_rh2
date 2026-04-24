@@ -4,6 +4,7 @@ pub struct TextInputs{
     pub dia_adicionando_employee_screen: String,
     pub filtro_funcionario_employee_screen: String,
     pub more_info_company_day_off_screen: String,
+    pub more_info_employee_day_off_screen: String,
 }
 #[derive(Debug, Clone)]
 pub enum TextInputsEnum{
@@ -11,4 +12,5 @@ pub enum TextInputsEnum{
     DiaAdicionandoEmployeeScreen,
     FiltroFuncionarioEmployeesScreen,
     MoreInfoCompanyDayOffScreen,
+    MoreInfoEmployeeDayOffScreen,
 }
