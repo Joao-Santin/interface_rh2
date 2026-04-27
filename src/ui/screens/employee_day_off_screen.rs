@@ -1,10 +1,11 @@
 use iced::{Element};
-use iced::widget::{button, column, pick_list, row, text, text_input, Column};
+use iced::widget::{button, column, pick_list, row, text, text_input, Column, checkbox};
 
 use crate::ui::components::textinputs::{TextInputsEnum};
 use crate::ui::components::buttons::Buttons;
 use crate::ui::Screen;
 use crate::ui::components::calendar::CalendarType;
+use crate::ui::components::checkboxes::CheckBoxes;
 use crate::app::state::AppState;
 use crate::app::message::Message;
 use crate::domain::info_add::info_add::{EmployeeDayOff, DayOffType};
@@ -49,7 +50,6 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
                         state.picked_dayoff_employee_creating,
                         Message::DayOffEmployeeTypePicked
                     ).placeholder("Qual Motivo da Falta?")
-
                 ],
                 row![
                     text("Inicio:"),
@@ -59,6 +59,11 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
                 ],
                 row![
                     text_input("O que aconteceu nesse dia?", &state.text_inputs.more_info_employee_day_off_screen).on_input(|v| Message::TextInputChanged(TextInputsEnum::MoreInfoEmployeeDayOffScreen, v))
+                ],
+                row![
+                    checkbox(state.uses_time_off_balance_dayoff_employee_creating)
+                        .label("UTILIZAR BANCO DE HORAS")
+                        .on_toggle(|is_checked| Message::CheckBoxToggled(CheckBoxes::UsesTimeOffBalance, is_checked))
                 ],
                 row![
                     if let (Some (typ), Some(start), Some(end)) = (
@@ -72,7 +77,7 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
                             start,
                             end,
                             more_info: state.text_inputs.more_info_employee_day_off_screen.clone(),
-                            uses_time_off_balance: true,
+                            uses_time_off_balance: state.uses_time_off_balance_dayoff_employee_creating,
                         })))
                     }else{
                         button("PREENCHA O QUE FALTA")
@@ -93,6 +98,5 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
         row![
             button("voltar").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employee(cpf))))
         ]
-
     ].into()
 }

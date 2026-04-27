@@ -6,6 +6,7 @@ use chrono::{Datelike, Months, Local};
 
 use crate::ui::screens::Screen;
 use crate::ui::components::buttons::Buttons;
+use crate::ui::components::checkboxes::CheckBoxes;
 use crate::ui::components::calendar::{CalendarMessage};
 use crate::ui::components::textinputs::TextInputsEnum;
 
@@ -170,6 +171,13 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                 }
                 Buttons::DeleteEmployeeDayOff(employeedayoff)=>{
                     state.info_add.delete_employee_day_off(employeedayoff)
+                }
+            }
+        }
+        Message::CheckBoxToggled(checkbox, bol) =>{
+            match checkbox{
+                CheckBoxes::UsesTimeOffBalance=>{
+                    state.uses_time_off_balance_dayoff_employee_creating = bol
                 }
             }
         }

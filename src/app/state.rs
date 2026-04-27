@@ -20,6 +20,7 @@ pub struct AppState {
     pub text_inputs: TextInputs,
     pub picked_dayoff_company_creating: Option<DayOffType>,
     pub picked_dayoff_employee_creating: Option<DayOffType>,
+    pub uses_time_off_balance_dayoff_employee_creating: bool,
     pub afd: AFD,//varios vecs, não ordenado
     pub info_add: InfoAdd,
     pub tally: Vec<(NaiveDateTime, Tally)>,//separa por NAIVEDATETIME
