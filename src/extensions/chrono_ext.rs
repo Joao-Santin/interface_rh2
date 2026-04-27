@@ -31,7 +31,9 @@ impl NaiveDateTimePtBr for NaiveDateTime{
     }
 }
 pub trait NaiveDateExt{
-        fn get_month_day_weekday(&self) -> Vec<(chrono::Weekday, u32)>;
+    fn get_month_day_weekday(&self) -> Vec<(chrono::Weekday, u32)>;
+    fn get_workday_duration(&self) -> Duration;
+
 }
 impl NaiveDateExt for NaiveDate{
     fn get_month_day_weekday(&self) -> Vec<(chrono::Weekday, u32)>{
@@ -43,6 +45,17 @@ impl NaiveDateExt for NaiveDate{
             date += Duration::days(1);
         }
         days
+    }
+    fn get_workday_duration(&self) -> Duration{
+        match self.weekday(){
+            Weekday::Mon |
+            Weekday::Tue |
+            Weekday::Wed |
+            Weekday::Thu => Duration::hours(9),
+            Weekday::Fri => Duration::hours(8),
+            Weekday::Sat |
+            Weekday::Sun => Duration::zero(),
+        }
     }
 
     }

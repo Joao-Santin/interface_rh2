@@ -12,7 +12,7 @@ use crate::ui::components::textinputs::TextInputsEnum;
 use crate::ui::Screen;
 use crate::app::state::AppState;
 use crate::app::message::Message;
-use crate::domain::tally::tally::Tally;
+use crate::domain::tally::tally::{Tally, group_tally_by_day};
 use crate::ui::components::calendar::CalendarType;
 
 pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
@@ -24,17 +24,7 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
         .map(|(dt, tally)| (*dt, tally.clone()))
         .collect();
     marcacoes.sort_by_key(|(dt, _)| *dt);
-    let mut grouped: Vec<(NaiveDate, Vec<(NaiveDateTime, Tally)>)> = Vec::new();
-    for (dt, tally) in marcacoes {
-        if let Some((last_date, vec)) = grouped.last_mut() {
-            if *last_date == dt.date() {
-                vec.push((dt, tally));
-                continue;
-            }
-        }
-        grouped.push((dt.date(), vec![(dt, tally)]));
-    }
-    grouped.sort_by_key(|(date, _)| *date);
+    let grouped = group_tally_by_day(marcacoes);
     let spacing_hour = 180.0;
     let elementmarcacoes: Vec<Element<Message>> = grouped
         .iter()

@@ -6,6 +6,7 @@ use crate::{domain::afd::parser::parse_afd_lines, ui::screens::Screen};
 use crate::domain::afd::afd::{AFD, get_funcionarios};
 use crate::infra::afd_loader::decode_from_win1252_to_utf8;
 use crate::domain::tally::tally::{calculate_tally, Tally};
+use crate::domain::day_result::day_result::{DayResult};
 use crate::infra::info_add_loader::load_info_add;
 
 use chrono::{NaiveDateTime, Local};
@@ -24,6 +25,7 @@ pub struct AppState {
     pub afd: AFD,//varios vecs, não ordenado
     pub info_add: InfoAdd,
     pub tally: Vec<(NaiveDateTime, Tally)>,//separa por NAIVEDATETIME
+    pub day_result: Vec<DayResult>,//resultado de trabalhado por dia
     pub employees: HashMap<String, String>,
     pub last_afd_got: Option<NaiveDateTime>,
     pub last_add_info_got: Option<NaiveDateTime>,

@@ -1,6 +1,6 @@
 use crate::domain::afd::afd::MarcacaoPonto;
 use crate::domain::info_add::info_add::{InfoAdd, TypeOrigin};
-use chrono::{NaiveDateTime};
+use chrono::{NaiveDateTime, NaiveDate};
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -71,4 +71,18 @@ pub fn calculate_tally(
         ));
     }
     vec_verify
+}
+pub fn group_tally_by_day(tallys: Vec<(NaiveDateTime, Tally)>)->Vec<(NaiveDate, Vec<(NaiveDateTime, Tally)>)>{
+        let mut grouped: Vec<(NaiveDate, Vec<(NaiveDateTime, Tally)>)> = Vec::new();
+    for (dt, tally) in tallys {
+        if let Some((last_date, vec)) = grouped.last_mut() {
+            if *last_date == dt.date() {
+                vec.push((dt, tally));
+                continue;
+            }
+        }
+        grouped.push((dt.date(), vec![(dt, tally)]));
+    }
+    grouped.sort_by_key(|(date, _)| *date);
+    grouped
 }
