@@ -1,5 +1,5 @@
 use iced::Color;
-use chrono::{NaiveDate, NaiveDateTime};
+use chrono::{NaiveDateTime};
 use iced::Element;
 use iced::widget::{row, button, column, text, text_input, Column};
 use iced::Alignment::Center;
@@ -24,7 +24,7 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
         .map(|(dt, tally)| (*dt, tally.clone()))
         .collect();
     marcacoes.sort_by_key(|(dt, _)| *dt);
-    let grouped = group_tally_by_day(marcacoes);
+    let grouped = group_tally_by_day(&marcacoes);
     let spacing_hour = 180.0;
     let elementmarcacoes: Vec<Element<Message>> = grouped
         .iter()

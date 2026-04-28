@@ -8,6 +8,7 @@ use crate::ui::Screen;
 use crate::app::state::AppState;
 use crate::app::message::Message;
 use crate::ui::components::textinputs::{TextInputsEnum};
+use crate::domain::day_result::day_result::total_balance_by_cpf;
 
 pub fn view(state: &AppState) -> Element<'_, Message> {
     let funcionarios: Vec<Element<Message>> = state.employees
@@ -21,6 +22,12 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
             }
         })
         .map(|(k, v)|{
+        let total: chrono::Duration = state.day_result
+            .iter()
+            .filter(|dr| dr.cpf == k.clone())
+            .map(|dr| dr.balance)
+            .sum();
+        println!("TOTAL: {} - {:?}", v, total.num_minutes() as f32/60.0);
         row![
             column![
                 text(v)
@@ -29,7 +36,7 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
                 text(k)
             ].width(Fixed(150.0)).align_x(Center),
             column![
-                text("*")
+                text(format!("{}", (total_balance_by_cpf(&state.day_result, &k).num_minutes() as f32 / 60.0).to_string())),
             ].width(Fixed(150.0)).align_x(Center),
             column![
                 button("config").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employee(k.clone()))))

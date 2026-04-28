@@ -56,7 +56,8 @@ impl AppState {
 
     }
     pub fn load_tally(&mut self) {
-        self.tally = calculate_tally(self.info_add.clone(), self.afd.marcacaoponto.clone())
+        self.tally = calculate_tally(self.info_add.clone(), self.afd.marcacaoponto.clone());
+        self.day_result = DayResult::from_appstate(&self)
     }
     pub fn load_afd(&mut self, path: PathBuf) {
         if let Some(decoded) = decode_from_win1252_to_utf8(path){

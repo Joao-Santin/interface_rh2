@@ -72,9 +72,11 @@ pub fn calculate_tally(
     }
     vec_verify
 }
-pub fn group_tally_by_day(tallys: Vec<(NaiveDateTime, Tally)>)->Vec<(NaiveDate, Vec<(NaiveDateTime, Tally)>)>{
-        let mut grouped: Vec<(NaiveDate, Vec<(NaiveDateTime, Tally)>)> = Vec::new();
-    for (dt, tally) in tallys {
+pub fn group_tally_by_day(tallys: &Vec<(NaiveDateTime, Tally)>)->Vec<(NaiveDate, Vec<(NaiveDateTime, Tally)>)>{
+    let mut sorted = tallys.clone();
+    sorted.sort_by_key(|(dt, _)| *dt);
+    let mut grouped: Vec<(NaiveDate, Vec<(NaiveDateTime, Tally)>)> = Vec::new();
+    for (dt, tally) in sorted {
         if let Some((last_date, vec)) = grouped.last_mut() {
             if *last_date == dt.date() {
                 vec.push((dt, tally));

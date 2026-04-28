@@ -27,10 +27,12 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                         }
                         Screen::Employees => {
                             println!("Employees");
+                            state.load_tally();
                             state.current_screen = screen
                         }
                         Screen::Employee(cpf) => {
                             println!("Employee");
+                            state.load_tally();
                             state.current_screen = Screen::Employee(cpf)
                         }
                         Screen::DatePicker(calendar_type, cpf)=>{
@@ -39,10 +41,12 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                         }
                         Screen::CompanyDayOff => {
                             println!("CompanyDayOff");
+                            state.load_tally();
                             state.current_screen = screen
                         }
                         Screen::EmployeeDayOff(cpf) => {
                             println!("EmployeeDayOff");
+                            state.load_tally();
                             state.current_screen = Screen::EmployeeDayOff(cpf)
                         }
                     }

@@ -1,9 +1,10 @@
-use chrono::{Datelike, NaiveDate, NaiveDateTime, Weekday, Duration};
+use chrono::{Datelike, NaiveDate, NaiveDateTime, Weekday, Duration, Timelike};
 
 pub trait NaiveDateTimePtBr{
     fn monthname_abb_ptbr(&self) -> &'static str;
     fn monthname_ptbr(&self) -> &'static str;
     fn weekdayname_ptbr(&self) -> &'static str;
+    fn round_with_tolerance(&self) -> Self;
 }
 impl NaiveDateTimePtBr for NaiveDateTime{
     fn monthname_abb_ptbr(&self) -> &'static str{
@@ -27,6 +28,20 @@ impl NaiveDateTimePtBr for NaiveDateTime{
             Weekday::Fri => "Sexta-feira",
             Weekday::Sat => "Sábado",
             Weekday::Sun => "Domingo",
+        }
+    }
+    fn round_with_tolerance(&self) -> Self {
+        let minute = self.minute();
+
+        if minute <= 12 {
+            self.with_minute(0).unwrap().with_second(0).unwrap()
+        } else if minute >= 48 {
+            self
+                .with_minute(0).unwrap()
+                .with_second(0).unwrap()
+                + Duration::hours(1)
+        } else {
+            self.with_second(0).unwrap()
         }
     }
 }
@@ -82,6 +97,9 @@ impl NaiveDateTimePtBr for NaiveDate{
             Weekday::Sat => "Sábado",
             Weekday::Sun => "Domingo",
         }
+    }
+    fn round_with_tolerance(&self) -> Self {
+        *self
     }
 }
 pub fn is_valid_naivedatetime(date_string:&String) -> bool{
