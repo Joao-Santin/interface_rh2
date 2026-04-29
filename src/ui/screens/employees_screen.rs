@@ -1,7 +1,7 @@
 use iced::Element;
 use iced::widget::{row, button, column, text, Column, scrollable, text_input};
 use iced::Alignment::Center;
-use iced::Length::{Fixed};
+use iced::Length::{Fixed, Fill};
 
 use crate::ui::components::buttons::Buttons;
 use crate::ui::Screen;
@@ -22,12 +22,6 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
             }
         })
         .map(|(k, v)|{
-        let total: chrono::Duration = state.day_result
-            .iter()
-            .filter(|dr| dr.cpf == k.clone())
-            .map(|dr| dr.balance)
-            .sum();
-        println!("TOTAL: {} - {:?}", v, total.num_minutes() as f32/60.0);
         row![
             column![
                 text(v)
@@ -46,23 +40,27 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
     let coluna_funcionarios = Column::with_children(funcionarios);
     let cabecalho = row![
         column![
-            text("NOME").size(20),
+            text("NOME").size(20).color([0.5, 0.5, 0.5]),
         ].width(Fixed(150.0)).align_x(Center),
         column![
-            text("CPF").size(20),
+            text("CPF").size(20).color([0.5, 0.5, 0.5]),
         ].width(Fixed(150.0)).align_x(Center),
         column![
-            text("BANCO HORAS").size(20),
+            text("BANCO HORAS").size(20).color([0.5, 0.5, 0.5]),
         ].width(Fixed(150.0)).align_x(Center),
         column![
-            text("CONFIG").size(20),
+            text("CONFIG").size(20).color([0.5, 0.5, 0.5]),
         ].width(Fixed(150.0)).align_x(Center),
     ].spacing(15);
     column![
-        text("Employees Screen"),
-        text_input("Procurando quem?", &state.text_inputs.filtro_funcionario_employee_screen).on_input(|v| Message::TextInputChanged(TextInputsEnum::FiltroFuncionarioEmployeesScreen, v)),
-        button("To Main").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Main))),
+        text("Employees Screen")
+            .width(Fill)
+            .size(60)
+            .color([0.5, 0.5, 0.5])
+            .align_x(Center),
+        button("VOLTAR TELA").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Main))),
+        text_input("Procurando quem?", &state.text_inputs.filtro_funcionario_employee_screen).on_input(|v| Message::TextInputChanged(TextInputsEnum::FiltroFuncionarioEmployeesScreen, v)).width(Fixed(300.0)),
         cabecalho,
-        scrollable(coluna_funcionarios)
-    ].into()
+        scrollable(coluna_funcionarios.spacing(5.0))
+    ].align_x(Center).spacing(10.0).into()
 }

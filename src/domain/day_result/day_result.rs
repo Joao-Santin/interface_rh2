@@ -31,7 +31,15 @@ pub fn calculate_worked_time(registros: &Vec<(NaiveDateTime, Tally)>)-> Duration
 pub fn total_balance_by_cpf(day_results:&[DayResult], cpf: &String) -> Duration{
     day_results
         .iter()
-        .filter(|dr| dr.cpf == cpf.clone())
+        .filter(|dr| dr.cpf.trim() == cpf.clone().trim())
+        .map(|dr| dr.balance)
+        .sum()
+}
+pub fn total_balance_by_cpf_with_dates(start: NaiveDate, end: NaiveDate, day_results:&[DayResult], cpf: &String) -> Duration{
+    day_results
+        .iter()
+        .filter(|dr| dr.cpf.trim() ==cpf.trim())
+        .filter(|dr| dr.date >= start && dr.date <= end)
         .map(|dr| dr.balance)
         .sum()
 }
