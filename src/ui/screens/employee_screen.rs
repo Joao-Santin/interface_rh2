@@ -284,7 +284,11 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
         text("").into()
     };
     column![
-        text("TELA DO FUNCIONARIO"),
+        text("PONTOS FUNCIONARIO")
+                    .width(Fill)
+                    .size(60)
+                    .color([0.5, 0.5, 0.5])
+                    .align_x(Center),
         button("VOLTAR PARA ULTIMA TELA").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employees))),
         text(format!("CPF: {} || NOME: {}",
             &cpf,
@@ -293,25 +297,14 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
                 .get(&cpf)
                 .map(|s| s.as_str())
                 .unwrap_or("Nao encontrado")
-        )),
+        )).width(Fill).size(20).color([0.5, 0.5, 0.5]).align_x(Center),
         row![
-            button("FERIAS E FALTAS!").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::EmployeeDayOff(cpf.clone()))))
-        ],
-        row![
-            text("Do dia "),
-            button(text(format!("{:?}", state.sel_dates.selected_date.get(&CalendarType::StartFilter).map(|d| d.to_string()).unwrap_or("Sem data".to_string())))).on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::StartFilter, Some(cpf.clone()))))),
-            text(" ao "),
-            button(text(format!("{:?}", state.sel_dates.selected_date.get(&CalendarType::EndFilter).map(|d| d.to_string()).unwrap_or("Sem data".to_string())))).on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::EndFilter, Some(cpf.clone()))))),
-        ],
-        row![
-            text("BANCO HORAS PERIODO:"),
-            text(format!("{}H", total_balance_by_cpf_with_dates(*state.sel_dates.selected_date.get(&CalendarType::StartFilter).unwrap(), *state.sel_dates.selected_date.get(&CalendarType::EndFilter).unwrap(), &state.day_result, &cpf.clone()).num_minutes() as f32 / 60.0))
-
+            button("FERIAS E FALTAS").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::EmployeeDayOff(cpf.clone()))))
         ],
         row![
             column![
                 row![
-                    text("MANIPULAR DATA"),
+                    text("MANIPULAR DADOS").width(Fill).size(20).color([0.5, 0.5, 0.5]).align_x(Center),
                 ],
                 row![
                     text("Alterar:"),
@@ -340,6 +333,18 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
                 ].spacing(5)
             ].width(Fill).align_x(Center),
         ].spacing(10),
+        text("BUSCA DADOS").width(Fill).size(20).color([0.5, 0.5, 0.5]).align_x(Center),
+        row![
+            text("Do dia "),
+            button(text(format!("{:?}", state.sel_dates.selected_date.get(&CalendarType::StartFilter).map(|d| d.to_string()).unwrap_or("Sem data".to_string())))).on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::StartFilter, Some(cpf.clone()))))),
+            text(" ao dia "),
+            button(text(format!("{:?}", state.sel_dates.selected_date.get(&CalendarType::EndFilter).map(|d| d.to_string()).unwrap_or("Sem data".to_string())))).on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::DatePicker(CalendarType::EndFilter, Some(cpf.clone()))))),
+        ],
+        row![
+            text("BANCO HORAS PERIODO:"),
+            text(format!("{}H", total_balance_by_cpf_with_dates(*state.sel_dates.selected_date.get(&CalendarType::StartFilter).unwrap(), *state.sel_dates.selected_date.get(&CalendarType::EndFilter).unwrap(), &state.day_result, &cpf.clone()).num_minutes() as f32 / 60.0))
+
+        ],
         scrollable(coluna_marcacoes),
     ].width(Fill).height(Fill).align_x(Center).spacing(10.0).into()
 }
