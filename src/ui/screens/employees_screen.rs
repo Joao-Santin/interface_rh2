@@ -55,7 +55,7 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
         ].width(Fixed(150.0)).align_x(Center),
     ].spacing(15);
     column![
-        text("Employees Screen")
+        text("FUNCIONARIOS")
             .width(Fill)
             .size(60)
             .color([0.5, 0.5, 0.5])

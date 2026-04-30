@@ -19,7 +19,9 @@ pub enum DayOffType{
     Holiday,
     Vacation,
     SickLeave,
+    ProgrammedLeave,
     CollectiveLeave,
+    MedicalLeave,
 }
 impl std::fmt::Display for DayOffType{
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -27,7 +29,9 @@ impl std::fmt::Display for DayOffType{
             Self::CollectiveLeave => "Ferias Coletiva",
             Self::SickLeave => "Atestado",
             Self::Vacation => "Ferias",
-            Self::Holiday => "Feriado"
+            Self::Holiday => "Feriado",
+            Self::MedicalLeave => "Afastamento Medico",
+            Self::ProgrammedLeave => "Programa Banco Horas"
         })
     }
 }
@@ -46,6 +50,7 @@ pub struct EmployeeDayOff{
     pub end: NaiveDate,
     pub more_info: String,
     pub uses_time_off_balance: bool,
+    // pub perde_bonificacao:  bool,
 }
 #[derive(Default, Clone, Serialize, Deserialize, Debug)]
 pub struct InfoAdd{
