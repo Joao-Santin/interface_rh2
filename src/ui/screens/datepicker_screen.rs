@@ -11,8 +11,10 @@ use crate::ui::components::buttons::Buttons;
 
 pub fn view(state: &AppState, calendar_type: CalendarType, cpf: Option<String>) -> Element<'_, Message>{
     let screen_retorno = match calendar_type{
-        CalendarType::StartFilter => Screen::Employee(cpf.unwrap()),
-        CalendarType::EndFilter => Screen::Employee(cpf.unwrap()),
+        CalendarType::StartFilterEmployee => Screen::Employee(cpf.unwrap()),
+        CalendarType::EndFilterEmployee => Screen::Employee(cpf.unwrap()),
+        CalendarType::StartFilterEmployees => Screen::Employees,
+        CalendarType::EndFilterEmployees => Screen::Employees,
         CalendarType::DailyEvents => Screen::Main,
         CalendarType::StartDayOffCompany => Screen::CompanyDayOff,
         CalendarType::EndDayOffCompany => Screen::CompanyDayOff,

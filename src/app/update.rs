@@ -176,6 +176,11 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                 Buttons::DeleteEmployeeDayOff(employeedayoff)=>{
                     state.info_add.delete_employee_day_off(employeedayoff)
                 }
+                Buttons::AddToInfoAddBhLegado(cpf, minutos)=>{
+                    if let Ok(minutos_i32) = minutos.parse::<i32>(){
+                        state.info_add.bh_legado.insert(cpf, minutos_i32);
+                    }
+                }
             }
         }
         Message::CheckBoxToggled(checkbox, bol) =>{
@@ -207,6 +212,11 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                 }
                 TextInputsEnum::MoreInfoEmployeeDayOffScreen=>{
                     state.text_inputs.more_info_employee_day_off_screen = valor
+                }
+                TextInputsEnum::BHLegadoEmployeeScreen=>{
+                    let valor = valor.chars().filter(|c| c.is_ascii_digit() || *c == '-').collect();
+                    state.text_inputs.bh_legado_employee_screen = valor
+
                 }
             }
         }

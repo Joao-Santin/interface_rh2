@@ -13,8 +13,10 @@ use crate::app::message::Message;
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq)]
 pub enum CalendarType{
     DailyEvents,
-    StartFilter,
-    EndFilter,
+    StartFilterEmployee,
+    EndFilterEmployee,
+    StartFilterEmployees,
+    EndFilterEmployees,
     StartDayOffCompany,
     EndDayOffCompany,
     StartDayOffCompanyCreating,
@@ -28,8 +30,10 @@ impl fmt::Display for CalendarType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let text = match self {
             CalendarType::DailyEvents => "DailyEvents",
-            CalendarType::StartFilter => "StartFilter",
-            CalendarType::EndFilter => "EndFilter",
+            CalendarType::StartFilterEmployee => "StartFilterEmployee",
+            CalendarType::EndFilterEmployee => "EndFilterEmployee",
+            CalendarType::StartFilterEmployees => "StartFilterEmployees",
+            CalendarType::EndFilterEmployees => "EndFilterEmployees",
             CalendarType::StartDayOffCompany => "StartDayOffCompany",
             CalendarType::EndDayOffCompany => "EndDayOffCompany",
             CalendarType::StartDayOffCompanyCreating => "StartDayOffCompanyCreating",
@@ -50,8 +54,11 @@ impl Default for Calendar{
         let mut selected_date = HashMap::new();
         let time_now = Local::now().date_naive();
         selected_date.insert(CalendarType::DailyEvents, time_now);
-        selected_date.insert(CalendarType::StartFilter, time_now);
-        selected_date.insert(CalendarType::EndFilter, time_now);
+        selected_date.insert(CalendarType::StartFilterEmployee, time_now);
+        selected_date.insert(CalendarType::EndFilterEmployee, time_now);
+        selected_date.insert(CalendarType::StartFilterEmployees, time_now);
+        selected_date.insert(CalendarType::EndFilterEmployees, time_now);
+        
         selected_date.insert(CalendarType::StartDayOffCompany, time_now);
         selected_date.insert(CalendarType::EndDayOffCompany, time_now);
         selected_date.insert(CalendarType::StartDayOffCompanyCreating, time_now);

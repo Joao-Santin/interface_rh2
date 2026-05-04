@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use chrono::{NaiveDateTime, NaiveDate};
 use serde::{Serialize, Deserialize};
 use crate::domain::afd::afd::MarcacaoPonto;
@@ -59,8 +61,11 @@ pub struct InfoAdd{
     #[serde(default)]
     pub company_day_off: Vec<CompanyDayOff>,
     #[serde(default)]
-    pub employee_day_off: Vec<EmployeeDayOff>
+    pub employee_day_off: Vec<EmployeeDayOff>,
+    #[serde(default)]
+    pub bh_legado: HashMap<String, i32>
 }
+
 impl InfoAdd{
     pub fn create_manual_ponto(&mut self, novo: ManualPonto){
         self.manualponto.push(novo);

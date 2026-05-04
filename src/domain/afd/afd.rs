@@ -255,6 +255,11 @@ impl RegistryType{
                 let date_time = &linha[10..29];
                 let cpf_empregado = &linha[35..46];
                 let registro_hexa = &linha[46..50];
+                // 🚫🚫trecho faz não dar push se tiver 7 zeros no comeco do cpf🚫🚫
+                // if &cpf_empregado[0..7] == "0000000"{
+                //     return;
+                // }
+                // 🚫🚫trecho faz não dar push se tiver 7 zeros no comeco do cpf🚫🚫
                 // println!("nsr: {}", nsr);
                 // println!("registro: {}", registro);
                 // println!("data/hora: {}", date_time);

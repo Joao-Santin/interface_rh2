@@ -8,6 +8,7 @@ pub enum Buttons{
     GetInfoAdd,
     SaveInfoAdd,
     TallyData,
+    AddToInfoAddBhLegado(String, String),// cpf e valor
     CalendarButton(CalendarMessage),
     CreateManualPonto(ManualPonto),//criando e alterando infoadd do state.
     EditManualPonto(ManualPonto),
