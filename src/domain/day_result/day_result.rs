@@ -51,15 +51,25 @@ impl DayResult{
         let is_company_day_off = info.company_day_off.iter().any(|cdo|{
             date>=cdo.start && date <= cdo.end
         });
-        let is_employee_day_off = info.employee_day_off.iter().any(|edo|{
-            edo.cpf.trim() == cpf.trim() && date >= edo.start && date <= edo.end
+        let employee_day_off = info.employee_day_off.iter().find(|edo| {
+            edo.cpf.trim() == cpf.trim() && date >= edo.start && date <=edo.end
         });
-        let expected = if is_company_day_off || is_employee_day_off {
-            chrono::Duration::zero()
+        let default_expected = date.get_workday_duration();
+        let (expected, balance) = if is_company_day_off{
+            (Duration::zero(), Duration::zero())
+        }else if let Some(edo) = employee_day_off {
+            if edo.typ.uses_bh(){
+                let expected = default_expected;
+                let balance = worked - expected;
+                (expected, balance)
+            }else{
+                (Duration::zero(), Duration::zero())
+            }
         }else{
-            date.get_workday_duration()
+            let expected = default_expected;
+            let balance = worked - default_expected;
+            (expected, balance)
         };
-        let balance = worked - expected;
         Self{
             cpf,
             date,
@@ -86,14 +96,6 @@ impl DayResult{
                 .unwrap_or_else(|| Vec::new());
 
             let cpfs: HashSet<String> = state.employees.keys().cloned().collect();
-            // let cpfs: HashSet<String> = if registros_do_dia.is_empty() {
-            //     state.employees.keys().cloned().collect()
-            // } else {
-            //     registros_do_dia
-            //         .iter()
-            //         .map(|(_, t)| t.cpf.clone())
-            //         .collect()
-            // };
 
             for cpf in cpfs {
                 let filtrados: Vec<_> = registros_do_dia
@@ -114,34 +116,3 @@ impl DayResult{
         }        resultados
     }
 }
-        // let resultados: Vec<DayResult> = grouped_tally
-        //     .iter()
-        //     .map(|(date, registros)| {
-        //         let mut results = Vec::new();
-        //
-        //         let cpfs: HashSet<String> = registros
-        //             .iter()
-        //             .map(|(_, t)| t.cpf.clone())
-        //             .collect();
-        //
-        //         for cpf in cpfs {
-        //             let filtrados: Vec<_> = registros
-        //                 .iter()
-        //                 .filter(|(_, t)| t.cpf == cpf)
-        //                 .cloned()
-        //                 .collect();
-        //
-        //             results.push(
-        //                 DayResult::from_group(
-        //                     cpf,
-        //                     (*date, filtrados),
-        //                     &state.info_add
-        //                 )
-        //             );
-        //         }
-        //
-        //         results
-        //     })
-        //     .flatten()
-        //     .collect();
-

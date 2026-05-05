@@ -5,7 +5,7 @@ use iced::widget::{row, button, column, text, text_input, Column, scrollable};
 use iced::Alignment::Center;
 use iced::Length::{Fixed, Fill};
 
-use crate::domain::info_add::info_add::{ManualPonto, TypeOrigin};
+use crate::domain::info_add::info_add::{ManualPonto, TypeOrigin, DayOffType};
 use crate::extensions::chrono_ext::{is_valid_naivedatetime, NaiveDateTimePtBr};
 use crate::ui::components::buttons::Buttons;
 use crate::ui::components::textinputs::TextInputsEnum;
@@ -122,14 +122,14 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
                 if dr.date.weekday() == Weekday::Sat || dr.date.weekday() == Weekday::Sun{
                     row![
                         text("FINAL DE SEMANA").style(|_| iced::widget::text::Style{
-                            color: Some(Color::from_rgb(1.0, 0.5, 0.0))
+                            color: Some(Color::from_rgb(0.0, 0.0, 1.0))
                         })
                     ].spacing(10.0)
 
                 }else if let Some(d) = state.info_add.company_day_off.iter().find(|d| dr.date >= d.start && dr.date <= d.end){
                     row![
                         text("DAY OFF EMPRESA").style(|_| iced::widget::text::Style{
-                            color: Some(Color::from_rgb(1.0, 0.5, 0.0))
+                            color: Some(Color::from_rgb(0.0, 0.5, 1.0))
                         }),
                         text(format!("{}", d.typ.to_string())),
                         text(format!("OBS:{}", d.more_info))
@@ -137,9 +137,16 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
                     
 
                 }else if let Some(d) = state.info_add.employee_day_off.iter().filter(|d| d.cpf == cpf).find(|d| dr.date>=d.start && dr.date <=d.end){
+                    let color = match d.typ {
+                        DayOffType::ProgrammedLeave
+                        | DayOffType::ParcialProgrammedLeave 
+                        | DayOffType::Vacation => Color::from_rgb(0.0, 1.0, 71.0/255.0),
+                        DayOffType::SickLeave | DayOffType::MedicalLeave => Color::from_rgb(1.0, 130.0/255.0, 120.0/255.0),
+                        _ => Color::WHITE,
+                    };
                     row![
-                        text("DAY OFF FUNCIONARIO").style(|_| iced::widget::text::Style{
-                            color: Some(Color::from_rgb(1.0, 0.5, 0.0))
+                        text("DAY OFF FUNCIONARIO").style(move |_| iced::widget::text::Style{
+                            color: Some(color)
                         }),
                         text(format!("{}", d.typ.to_string())),
                         text(format!("OBS:{}", d.more_info))

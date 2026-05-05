@@ -8,7 +8,8 @@ pub enum Screen{
     Employee(String),
     DatePicker(CalendarType, Option<String>),
     CompanyDayOff,
-    EmployeeDayOff(String)
+    EmployeeDayOff(String),
+    ChildCare(String)// cpf para retorno
 }
 impl Default for Screen {
     fn default() -> Self {

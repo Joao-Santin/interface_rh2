@@ -49,6 +49,11 @@ pub fn update(state: &mut AppState, message:Message) -> Command<Message>{
                             state.load_tally();
                             state.current_screen = Screen::EmployeeDayOff(cpf)
                         }
+                        Screen::ChildCare(cpf) => {
+                            println!("ChildCare");
+                            state.load_tally();
+                            state.current_screen = Screen::ChildCare(cpf)
+                        }
                     }
                 }
                 Buttons::GetAFDFile => {

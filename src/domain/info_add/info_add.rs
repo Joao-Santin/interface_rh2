@@ -27,6 +27,14 @@ pub enum DayOffType{
     CollectiveLeave,// n usa BH, n perde BON
     MedicalLeave,// n usa BH, perde BON
 }
+impl DayOffType{
+    pub fn uses_bh(&self)->bool{
+        matches!(
+        self,
+            DayOffType::ProgrammedLeave | DayOffType::ParcialProgrammedLeave
+    )
+    }
+}
 impl std::fmt::Display for DayOffType{
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(match self{
@@ -57,14 +65,33 @@ pub fn is_eligible_for_bonus(
             DayOffType::MedicalLeave
                 | DayOffType::SickLeave
         ));
-
     let has_absence = day_results
         .iter()
         .filter(|dr| dr.cpf.trim() == cpf.trim())
         .filter(|dr| dr.date >= start && dr.date <= end)
         .any(|dr| {
-            dr.expected > chrono::Duration::zero() && dr.worked < dr.expected
+            let is_programmed_leave = employee_day_offs.iter().any(|edo| {
+                edo.cpf.trim() == cpf.trim()
+                    && dr.date >= edo.start
+                    && dr.date <= edo.end
+                    && matches!(
+                        edo.typ,
+                        DayOffType::ProgrammedLeave | DayOffType::ParcialProgrammedLeave
+                    )
+            });
+
+            // só considera falta se NÃO for programado
+            dr.expected > chrono::Duration::zero()
+                && dr.worked < dr.expected
+                && !is_programmed_leave
         });
+    // let has_absence = day_results
+    //     .iter()
+    //     .filter(|dr| dr.cpf.trim() == cpf.trim())
+    //     .filter(|dr| dr.date >= start && dr.date <= end)
+    //     .any(|dr| {
+    //         dr.expected > chrono::Duration::zero() && dr.worked < dr.expected
+    //     });
 
     !(has_blocking_day_off || has_absence)
 }
