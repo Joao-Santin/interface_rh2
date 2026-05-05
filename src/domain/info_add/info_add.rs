@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use chrono::{NaiveDateTime, NaiveDate};
 use serde::{Serialize, Deserialize};
 use crate::domain::afd::afd::MarcacaoPonto;
+use crate::domain::day_result::day_result::{DayResult};
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum TypeOrigin{
@@ -18,12 +19,13 @@ pub struct ManualPonto{
 }
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq, Eq, Copy)]
 pub enum DayOffType{
-    Holiday,
-    Vacation,
-    SickLeave,
-    ProgrammedLeave,
-    CollectiveLeave,
-    MedicalLeave,
+    Holiday,//Feriados, usado pela empresa,n usa BH, n perde BON
+    Vacation,// Ferias de 1 pessoa n usa BH, n perde BON
+    SickLeave,// Atestado médico n usa BH, perde BOn
+    ProgrammedLeave,// Programou saida e usa BH, n perde bon
+    ParcialProgrammedLeave,// usa BH, n perde bon
+    CollectiveLeave,// n usa BH, n perde BON
+    MedicalLeave,// n usa BH, perde BON
 }
 impl std::fmt::Display for DayOffType{
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -33,9 +35,38 @@ impl std::fmt::Display for DayOffType{
             Self::Vacation => "Ferias",
             Self::Holiday => "Feriado",
             Self::MedicalLeave => "Afastamento Medico",
-            Self::ProgrammedLeave => "Programa Banco Horas"
+            Self::ProgrammedLeave => "Programa Banco Horas",
+            Self::ParcialProgrammedLeave => "Programa Banco Parcial"
         })
     }
+}
+pub fn is_eligible_for_bonus(
+    start: NaiveDate,
+    end: NaiveDate,
+    cpf: &str,
+    employee_day_offs: &[EmployeeDayOff],
+    day_results: &[DayResult],
+) -> bool {
+
+    let has_blocking_day_off = employee_day_offs
+        .iter()
+        .filter(|d| d.cpf == cpf)
+        .filter(|d| d.start <= end && d.end >= start)
+        .any(|d| matches!(
+            d.typ,
+            DayOffType::MedicalLeave
+                | DayOffType::SickLeave
+        ));
+
+    let has_absence = day_results
+        .iter()
+        .filter(|dr| dr.cpf.trim() == cpf.trim())
+        .filter(|dr| dr.date >= start && dr.date <= end)
+        .any(|dr| {
+            dr.expected > chrono::Duration::zero() && dr.worked < dr.expected
+        });
+
+    !(has_blocking_day_off || has_absence)
 }
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 pub struct CompanyDayOff{

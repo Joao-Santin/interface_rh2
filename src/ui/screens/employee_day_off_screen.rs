@@ -38,6 +38,7 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
         DayOffType::SickLeave,
         DayOffType::Vacation,
         DayOffType::ProgrammedLeave,
+        DayOffType::ParcialProgrammedLeave,
         DayOffType::MedicalLeave,
     ];
     container(

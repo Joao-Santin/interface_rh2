@@ -4,7 +4,7 @@ use crate::app::state::AppState;
 use std::collections::HashMap;
 
 pub fn get_funcionarios(appstate: &mut AppState)-> HashMap<String, String>{
-    let dados: HashMap<String, String> = appstate.afd.createupdatedeleteempregado.iter().map(|i| (i.nome_empregado.clone().trim().to_string(), i.cpf_empregado.clone().trim().to_string())).collect();
+    let dados: HashMap<String, String> = appstate.afd.createupdatedeleteempregado.iter().filter(|i| !i.cpf_empregado.contains("0000000") && !i.cpf_empregado.contains("12345678900") && !i.cpf_empregado.contains("42356258295") && !i.cpf_empregado.contains("98765432100")).map(|i| (i.nome_empregado.clone().trim().to_string(), i.cpf_empregado.clone().trim().to_string())).collect();
     let dados: HashMap<String, String> = dados.iter().map(|(k,v)| (v.clone().trim().to_string(), k.clone().trim().to_string())).collect();
     dados
 }

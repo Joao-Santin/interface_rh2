@@ -1,4 +1,5 @@
 use iced::Element;
+use iced::Color;
 use iced::widget::{row, button, column, text, Column, scrollable, text_input};
 use iced::Alignment::Center;
 use iced::Length::{Fixed, Fill};
@@ -9,6 +10,7 @@ use crate::app::state::AppState;
 use crate::app::message::Message;
 use crate::ui::components::textinputs::{TextInputsEnum};
 use crate::domain::day_result::day_result::{total_balance_by_cpf, total_balance_by_cpf_with_dates};
+use crate::domain::info_add::info_add::{is_eligible_for_bonus};
 use crate::ui::components::calendar::CalendarType;
 
 pub fn view(state: &AppState) -> Element<'_, Message> {
@@ -25,6 +27,14 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
             }
         })
         .map(|(k, v)|{
+            let elegivel = is_eligible_for_bonus(
+
+                state.sel_dates.selected_date.get(&CalendarType::StartFilterEmployees).unwrap().clone(),
+                state.sel_dates.selected_date.get(&CalendarType::EndFilterEmployees).unwrap().clone(),
+            k,
+            &state.info_add.employee_day_off,
+            &state.day_result
+            );
         row![
             column![
                 text(*v)
@@ -33,10 +43,20 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
                 text(*k)
             ].width(Fixed(150.0)).align_x(Center),
             column![
-                text(format!("{}H{}M", ((total_balance_by_cpf_with_dates(*state.sel_dates.selected_date.get(&CalendarType::StartFilterEmployees).unwrap(), *state.sel_dates.selected_date.get(&CalendarType::EndFilterEmployees).unwrap(),&state.day_result, &k) + state.info_add.bh_legado.get(*k).map(|m| chrono::Duration::minutes(*m as i64)).unwrap_or(chrono::Duration::zero())).num_minutes() as i32 / 60).to_string(), ((total_balance_by_cpf_with_dates(*state.sel_dates.selected_date.get(&CalendarType::StartFilterEmployees).unwrap(), *state.sel_dates.selected_date.get(&CalendarType::EndFilterEmployees).unwrap(),&state.day_result, &k) + state.info_add.bh_legado.get(*k).map(|m| chrono::Duration::minutes(*m as i64)).unwrap_or(chrono::Duration::zero())).num_minutes() as u32 % 60).to_string())),
+                text(format!("{}H{}M", ((total_balance_by_cpf_with_dates(*state.sel_dates.selected_date.get(&CalendarType::StartFilterEmployees).unwrap(), *state.sel_dates.selected_date.get(&CalendarType::EndFilterEmployees).unwrap(),&state.day_result, &k) + state.info_add.bh_legado.get(*k).map(|m| chrono::Duration::minutes(*m as i64)).unwrap_or(chrono::Duration::zero())).num_minutes() as i32 / 60).to_string(), ((total_balance_by_cpf_with_dates(*state.sel_dates.selected_date.get(&CalendarType::StartFilterEmployees).unwrap(), *state.sel_dates.selected_date.get(&CalendarType::EndFilterEmployees).unwrap(),&state.day_result, &k) + state.info_add.bh_legado.get(*k).map(|m| chrono::Duration::minutes(*m as i64)).unwrap_or(chrono::Duration::zero())).num_minutes().abs() as i32 % 60).to_string())),
             ].width(Fixed(150.0)).align_x(Center),
             column![
                 text(format!("{}", (total_balance_by_cpf(&state.day_result, &k).num_minutes() as f32 / 60.0).to_string())),
+            ].width(Fixed(150.0)).align_x(Center),
+            column![
+                text(if elegivel {"OK"} else {"SEM BONUS"})
+                    .style(move |_| iced::widget::text::Style{
+                        color: Some(if elegivel{
+                            Color::from_rgb(0.0, 1.0, 0.0)
+                        }else{
+                                Color::from_rgb(1.0, 0.0, 0.0)
+                        })
+                    }),
             ].width(Fixed(150.0)).align_x(Center),
             column![
                 button("config").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employee(k.to_string()))))
@@ -55,7 +75,10 @@ pub fn view(state: &AppState) -> Element<'_, Message> {
             text("BH PERIODO").size(20).color([0.5, 0.5, 0.5]),
         ].width(Fixed(150.0)).align_x(Center),
         column![
-            text("BENEFICIADO").size(20).color([0.5, 0.5, 0.5]),
+            text("BH TOTAL").size(20).color([0.5, 0.5, 0.5]),
+        ].width(Fixed(150.0)).align_x(Center),
+        column![
+            text("BONIFICADO").size(20).color([0.5, 0.5, 0.5]),
         ].width(Fixed(150.0)).align_x(Center),
         column![
             text("CONFIG").size(20).color([0.5, 0.5, 0.5]),
