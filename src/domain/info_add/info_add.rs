@@ -26,6 +26,7 @@ pub enum DayOffType{
     ParcialProgrammedLeave,// usa BH, n perde bon
     CollectiveLeave,// n usa BH, n perde BON
     MedicalLeave,// n usa BH, perde BON
+    SonsSickLeave,
 }
 impl DayOffType{
     pub fn uses_bh(&self)->bool{
@@ -44,7 +45,8 @@ impl std::fmt::Display for DayOffType{
             Self::Holiday => "Feriado",
             Self::MedicalLeave => "Afastamento Medico",
             Self::ProgrammedLeave => "Programa Banco Horas",
-            Self::ParcialProgrammedLeave => "Programa Banco Parcial"
+            Self::ParcialProgrammedLeave => "Programa Banco Parcial",
+            Self::SonsSickLeave => "Acompanhamento Medico Filho"
         })
     }
 }

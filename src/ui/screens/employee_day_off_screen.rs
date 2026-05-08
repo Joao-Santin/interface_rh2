@@ -49,7 +49,8 @@ pub fn view(state: &AppState, cpf: String) -> Element<'_, Message> {
                         .color([0.5, 0.5, 0.5])
                         .align_x(Center),
             row![
-                button("VOLTAR").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employee(cpf.clone()))))
+                button("VOLTAR").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::Employee(cpf.clone())))),
+                button("ATESTADO P/ FILHO").on_press(Message::ButtonPressed(Buttons::SwitchScreen(Screen::ChildCare(cpf.clone())))),
             ],
             container(
                 column![
