@@ -24,5 +24,9 @@ src/
 git clone https://github.com/Joao-Santin/interface_rh2
 cargo build
 cargo run
+
+- dentro do app carregar o arquivo AFD e arquivo complementar(se tiver)
+- fazer alterações, registros que quiser.
+- ao terminar o uso, salvar arquivo complementar novo e fechar.
 ```
 
